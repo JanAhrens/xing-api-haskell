@@ -1,0 +1,14 @@
+{-# LANGUAGE OverloadedStrings #-}
+module Config
+  (consumerKey, consumerSecret, testConsumer)
+where
+
+import Web.XING.Auth
+import Data.ByteString (ByteString)
+
+testConsumer :: OAuth
+testConsumer  = consumer consumerKey consumerSecret
+
+consumerKey, consumerSecret :: ByteString
+consumerKey    = "YOUR_CONSUMER_KEY"
+consumerSecret = "YOUR_CONSUMER_SECRET"

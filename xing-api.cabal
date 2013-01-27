@@ -1,0 +1,44 @@
+name:                xing-api
+version:             0.0.1
+license:             BSD3
+license-file:        LICENSE
+category:            Web
+copyright:           Copyright 2013 Jan Ahrens
+author:              Jan Ahrens
+maintainer:          Jan Ahrens
+cabal-version:       >=1.8
+homepage:            http://github.com/JanAhrens/xing-api
+bug-reports:         http://github.com/JanAhrens/xing-api/issues
+build-type:          Simple
+synopsis:            Wrapper for the XING API
+description:
+  This library is currently under development and not considered stable.
+  .
+  The source repository includes a demo program called CliDemo.hs.
+  To use the demo, you have to obtain an API consumer key from
+  https://dev.xing.com and create a Config.hs file.
+  The Config.hs.template file is recommended to be used as a template.
+  .
+      > cp Config.hs.template Config.hs
+
+library
+  exposed-modules: Web.XING.Auth
+  ghc-options:     -Wall
+
+  build-depends: base                 ==4.5.*
+               , containers           ==0.4.*
+               , time                 ==1.4.*
+               , network              ==2.3.*
+               , text                 ==0.11.*
+               , authenticate-oauth   ==1.4.*
+               , conduit              ==0.5.*
+               , http-types           ==0.7.*
+               , http-conduit         ==1.8.*
+               , resourcet            ==0.4.*
+               , transformers         ==0.3.*
+               , mtl                  ==2.1.*
+               , bytestring           ==0.9.*
+
+source-repository head
+  type:        git
+  location:    http://github.com/JanAhrens/xing-api.git

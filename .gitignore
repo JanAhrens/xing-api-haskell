@@ -1,0 +1,8 @@
+dist
+*.hi
+*.o
+Config.hs
+
+# vim temp files
+*.swp
+*.swo
