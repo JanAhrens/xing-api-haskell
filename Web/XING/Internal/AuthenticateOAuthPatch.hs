@@ -1,4 +1,5 @@
-{-# LANGUAGE OverloadedStrings, FlexibleContexts #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE FlexibleContexts  #-}
 module Web.XING.Internal.AuthenticateOAuthPatch(
     getTemporaryCredential'
   , authorizeUrl
@@ -48,11 +49,11 @@ authorizeUrl consumer = BS.pack . (authorizeUrl' (\_ -> const []) consumer{oauth
 
 -- we can't use OA.getAccessToken, because the XING API returns 201 instead of 200
 getAccessToken' :: (MonadResource m, MonadBaseControl IO m)
-               => (Request m -> Request m)
-               -> OAuth
-               -> Credential
-               -> Manager
-               -> m Credential
+                => (Request m -> Request m)
+                -> OAuth
+                -> Credential
+                -> Manager
+                -> m Credential
 getAccessToken' hook oa cr manager = do
   let req = hook (fromJust $ parseUrl $ oauthAccessTokenUri oa) { method = "POST" }
   rsp <- flip httpLbs manager =<< signOAuth oa (if oauthVersion oa == OAuth10 then delete "oauth_verifier" cr else cr) req
