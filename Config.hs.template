@@ -1,14 +1,17 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Config
-  (consumerKey, consumerSecret, testConsumer)
+  (testConsumer, accessToken)
 where
 
 import Web.XING.Auth
-import Data.ByteString (ByteString)
 
 testConsumer :: OAuth
-testConsumer  = consumer consumerKey consumerSecret
+testConsumer = consumer
+  "YOUR_CONSUMER_KEY"
+  "YOUR_CONSUMER_SECRET"
 
-consumerKey, consumerSecret :: ByteString
-consumerKey    = "YOUR_CONSUMER_KEY"
-consumerSecret = "YOUR_CONSUMER_SECRET"
+accessToken :: Maybe Credential
+accessToken = Nothing
+-- accessToken = Just $ newCredential
+--   "YOUR_ACCESS_TOKEN"
+--   "YOUR_ACCESS_TOKEN_SECRET"

@@ -10,9 +10,13 @@ module Web.XING.Auth(
   , getAccessToken'
   , Patch.token
   , Patch.tokenSecret
+  , signOAuth
+  -- * re-export of some Web.Authenticate.OAuth functions
+  , newCredential
   -- * re-export of some Web.Authenticate.OAuth types
   , Credential
   , OAuth
+  , Manager -- should be exported by Web.XING, b/c not auth specific
 )
 where
 
