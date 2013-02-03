@@ -22,7 +22,7 @@ description:
       > cp Config.hs.template Config.hs
 
 library
-  exposed-modules: Web.XING.Auth
+  exposed-modules: Web.XING.Auth, Web.XING, Web.XING.Calls.IdCard
   ghc-options:     -Wall
 
   build-depends: base                 ==4.5.*
@@ -38,6 +38,8 @@ library
                , transformers         ==0.3.*
                , mtl                  ==2.1.*
                , bytestring           ==0.9.*
+               , unordered-containers ==0.2.*
+               , aeson                ==0.6.*
 
 source-repository head
   type:        git

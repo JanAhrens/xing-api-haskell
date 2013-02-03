@@ -19,6 +19,7 @@ import qualified Control.Exception as E
 import qualified Config
 import Web.XING
 import Web.XING.Auth
+import Web.XING.Calls.IdCard
 
 readVerifier :: ByteString -> IO ByteString
 readVerifier uri = do
@@ -58,8 +59,10 @@ main = do
       accessToken <- if (isJust Config.accessToken)
         then return $ fromJust Config.accessToken
         else (auth manager)
-      Response _ _ _ body <- apiRequest Config.testConsumer manager accessToken "GET" "/v1/users/me/id_card"
-      liftIO $ BSL.putStrLn body
+      idCard <- getIdCard Config.testConsumer manager accessToken
+      liftIO $ case idCard of
+        Just a  -> BSL.putStrLn $ "Hello " `mappend` (displayName a)
+        Nothing -> BSL.putStrLn "failed to fetch id_card"
 
     auth manager = do
       successfulHandshake <- runReaderT handshake (Config.testConsumer, manager)

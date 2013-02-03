@@ -1,17 +1,18 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE FlexibleContexts  #-}
 module Web.XING(
-  apiRequest
+    apiRequest
 ) where
 
 import Web.XING.Auth
 import Network.HTTP.Types (Method)
 import qualified Data.ByteString.Char8 as BS
 import qualified Data.ByteString.Lazy.Char8 as BSL
-import Network.HTTP.Conduit (Response, Request(..), parseUrl, httpLbs)
+import Network.HTTP.Conduit (Response(..), Request(..), parseUrl, httpLbs)
 import Control.Monad.Trans.Resource (MonadResource, MonadBaseControl)
 import Data.Maybe (fromJust)
 import Data.Monoid (mappend)
+
 
 apiBaseUrl :: BS.ByteString
 apiBaseUrl = "https://api.xing.com"

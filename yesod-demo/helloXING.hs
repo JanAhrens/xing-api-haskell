@@ -6,8 +6,8 @@
 
 import Yesod
 import Config
-import Web.XING
-import Network.HTTP.Conduit (Manager, newManager, def, Response(..))
+import Web.XING.Calls.IdCard
+import Network.HTTP.Conduit (Manager, newManager, def)
 import Data.Maybe (fromJust)
 import Data.ByteString.Lazy.Char8 (unpack)
 
@@ -24,12 +24,13 @@ mkYesod "HelloXING" [parseRoutes|
 getHomeR :: Handler RepHtml
 getHomeR = do
   yesod <- getYesod
-  Response _ _ _ body <- apiRequest Config.testConsumer (httpManager yesod)
-                                    (fromJust Config.accessToken)
-                                    "GET" "/v1/users/me/id_card"
+  maybeIdCard <- getIdCard Config.testConsumer (httpManager yesod) (fromJust Config.accessToken)
   defaultLayout [whamlet|
     <h1>Hello XING
-    <code>#{unpack body}
+    $maybe idCard <- maybeIdCard
+      <p>Nice to meet you, #{unpack $ displayName idCard}.
+    $nothing
+      <p>Sorry but something went wrong.
   |]
 
 main :: IO ()
