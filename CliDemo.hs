@@ -44,9 +44,9 @@ main :: IO ()
 main = do
   putStrLn "XING API demo"
   withAPI $ \manager -> do
-    accessToken <- if (isJust Config.accessToken)
+    accessToken <- if isJust Config.accessToken
       then return $ fromJust Config.accessToken
-      else (auth manager)
+      else auth manager
     idCard <- getIdCard Config.testConsumer manager accessToken
     liftIO $ case idCard of
       Just a  -> BSL.putStrLn $ "Hello " `mappend` (displayName a)
