@@ -6,8 +6,8 @@
 
 import Yesod
 import Config
-import Web.XING.Calls.IdCard
-import Network.HTTP.Conduit (Manager, newManager, def)
+import Web.XING
+import Network.HTTP.Conduit (newManager, def)
 import Data.Maybe (fromJust)
 import Data.ByteString.Lazy.Char8 (unpack)
 

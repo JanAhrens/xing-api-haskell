@@ -1,13 +1,15 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE FlexibleContexts  #-}
-module Web.XING.Calls.IdCard(
-    getIdCard
-  , IdCard(..)
-  , demoIdCard
-  , demoIdCard'
-) where
 
-import Web.XING
+module Web.XING.Calls.IdCard
+    (
+      getIdCard
+    , IdCard(..)
+    , demoIdCard
+    , demoIdCard'
+    ) where
+
+import Web.XING.Calls
 import Web.XING.Auth
 import qualified Data.ByteString.Lazy.Char8 as BSL
 import Control.Monad.Trans.Resource (MonadResource, MonadBaseControl)

@@ -18,8 +18,6 @@ import qualified Control.Exception as E
 
 import qualified Config
 import Web.XING
-import Web.XING.Auth
-import Web.XING.Calls.IdCard
 
 readVerifier :: ByteString -> IO ByteString
 readVerifier uri = do

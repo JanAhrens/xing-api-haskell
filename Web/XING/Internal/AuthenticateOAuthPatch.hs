@@ -1,12 +1,15 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE FlexibleContexts  #-}
-module Web.XING.Internal.AuthenticateOAuthPatch(
-    getTemporaryCredential'
-  , authorizeUrl
-  , getAccessToken'
-  , token
-  , tokenSecret
-) where
+
+module Web.XING.Internal.AuthenticateOAuthPatch
+    ( -- * changed Web.Authenticate.OAuth functions
+      getTemporaryCredential'
+    , authorizeUrl
+    , getAccessToken'
+      -- * accessor functions for Credential (from Web.Authenticate.OAuth)
+    , token
+    , tokenSecret
+    ) where
 
 import Web.Authenticate.OAuth hiding (authorizeUrl, getAccessToken', getTemporaryCredential')
 import qualified Data.ByteString.Char8 as BS

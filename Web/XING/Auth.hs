@@ -1,24 +1,25 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE ScopedTypeVariables #-}
-module Web.XING.Auth(
-    consumer
-  , getRequestToken
-  , getRequestToken'
-  , Patch.authorizeUrl
-  , getAccessToken
-  , getAccessToken'
-  , Patch.token
-  , Patch.tokenSecret
-  , signOAuth
-  -- * re-export of some Web.Authenticate.OAuth functions
-  , newCredential
-  -- * re-export of some Web.Authenticate.OAuth types
-  , Credential
-  , OAuth
-  , Manager -- should be exported by Web.XING, b/c not auth specific
-)
-where
+
+module Web.XING.Auth
+    ( -- * OAuth related functions
+      consumer
+    , getRequestToken
+    , getRequestToken'
+    , Patch.authorizeUrl
+    , getAccessToken
+    , getAccessToken'
+    , Patch.token
+    , Patch.tokenSecret
+      -- * re-export of some Web.Authenticate.OAuth functions
+    , signOAuth
+    , newCredential
+      -- * re-export of some Web.Authenticate.OAuth types
+    , Credential
+    , OAuth
+    , Manager -- TODO should be exported by Web.XING, b/c not auth specific
+    ) where
 
 import qualified Data.ByteString as BS
 
