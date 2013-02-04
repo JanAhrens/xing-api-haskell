@@ -14,10 +14,10 @@ import Web.XING.Auth
 import qualified Data.ByteString.Lazy.Char8 as BSL
 import Control.Monad.Trans.Resource (MonadResource, MonadBaseControl)
 import Control.Applicative ((<$>), (<*>))
-import Data.Aeson (
-    (.:), decode, FromJSON(..), Value(..)
-  , object, (.=), encode
-  )
+import Data.Aeson
+    ( (.:), decode, FromJSON(..), Value(..)
+    , object, (.=), encode
+    )
 import Data.HashMap.Lazy (HashMap)
 import Network.HTTP.Conduit (Response(..))
 
