@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE FlexibleContexts #-}
 
-module Web.XING.Calls
+module Web.XING.API
     ( -- * API request interface
       apiRequest
     , apiBaseUrl

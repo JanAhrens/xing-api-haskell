@@ -9,7 +9,7 @@ module Web.XING.Calls.IdCard
     , demoIdCard'
     ) where
 
-import Web.XING.Calls
+import Web.XING.API
 import Web.XING.Auth
 import qualified Data.ByteString.Lazy.Char8 as BSL
 import Control.Monad.Trans.Resource (MonadResource, MonadBaseControl)
