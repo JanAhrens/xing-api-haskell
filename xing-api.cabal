@@ -33,7 +33,7 @@ library
                , authenticate-oauth   ==1.4.*
                , conduit              ==0.5.*
                , http-types           ==0.7.*
-               , http-conduit         ==1.8.*
+               , http-conduit         ==1.8.4.*
                , resourcet            ==0.4.*
                , transformers         ==0.3.*
                , mtl                  ==2.1.*
