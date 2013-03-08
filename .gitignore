@@ -6,3 +6,11 @@ Config.hs
 # vim temp files
 *.swp
 *.swo
+
+# vagrant
+/.vagrant
+
+# chef, librarian
+/Cheffile.lock
+/cookbooks
+/tmp
