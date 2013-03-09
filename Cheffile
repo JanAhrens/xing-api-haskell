@@ -3,5 +3,8 @@
 
 site 'http://community.opscode.com/api/v1'
 
-cookbook 'haskell', :git => 'https://github.com/mohanzhang/haskell-platform-chef-cookbook.git'
+cookbook 'build-essential'
 cookbook 'apt'
+cookbook 'vim'
+cookbook 'git'
+cookbook 'haskell', :git => 'https://github.com/JanAhrens/haskell-platform-chef-cookbook.git'

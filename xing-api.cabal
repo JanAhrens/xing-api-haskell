@@ -31,15 +31,16 @@ library
                , network              ==2.3.*
                , text                 ==0.11.*
                , authenticate-oauth   ==1.4.*
-               , conduit              ==0.5.*
-               , http-types           ==0.7.*
-               , http-conduit         ==1.8.4.*
+               , conduit              ==1.0.*
+               , http-types           ==0.8.*
+               , http-conduit         ==1.8.*
                , resourcet            ==0.4.*
-               , transformers         ==0.3.*
-               , mtl                  ==2.1.*
+               , transformers         ==0.2.*
+               , mtl                  ==2.0.*
                , bytestring           ==0.9.*
                , unordered-containers ==0.2.*
                , aeson                ==0.6.*
+               , yesod                ==1.1.*
 
 source-repository head
   type:        git
