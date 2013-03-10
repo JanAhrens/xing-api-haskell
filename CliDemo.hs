@@ -3,17 +3,17 @@
 
 module CliDemo where
 
-import Prelude hiding (putStrLn, putStr, getLine)
 import System.IO (hFlush, stdout)
-import Data.ByteString (getLine)
-import Data.ByteString.Char8 (putStrLn, putStr)
-import qualified Data.ByteString.Lazy.Char8 as BSL
-import Data.Monoid (mappend)
 import Data.Maybe (fromJust, isJust)
 import Network.HTTP.Conduit (withManager)
+
 import Control.Monad.IO.Class (MonadIO (liftIO))
 import Control.Monad.Trans.Control (MonadBaseControl)
 import Control.Monad.Trans.Resource (MonadResource)
+
+import Data.Monoid (mappend)
+import qualified Data.ByteString.Char8 as BS
+import qualified Data.Text.IO as T
 
 import qualified Config
 import Web.XING
@@ -23,21 +23,21 @@ readVerifier
   -> IO Verifier
 readVerifier url = do
   putStrLn "Please confirm the authorization at"
-  putStrLn $ "  " `mappend` url
+  putStrLn $ "  " `mappend` (BS.unpack url)
   putStr   "Please enter the PIN: " >> hFlush stdout
-  getLine
+  BS.getLine
 
 showAccessToken
   :: (AccessToken, ByteString)
   -> IO ()
 showAccessToken (accessToken, userId) = do
   putStrLn $ ""
-  putStrLn $ "Hello " `mappend` userId `mappend` "!"
+  putStrLn $ "Hello " `mappend` (BS.unpack userId) `mappend` "!"
   putStrLn $ "You should put your access token in Config.hs:"
   putStrLn $ ""
   putStrLn $ "accessToken = Just $ newCredential"
-  putStrLn $ "  \"" `mappend` (token       accessToken) `mappend` "\""
-  putStrLn $ "  \"" `mappend` (tokenSecret accessToken) `mappend` "\""
+  putStrLn $ "  \"" `mappend` ((BS.unpack.token)       accessToken) `mappend` "\""
+  putStrLn $ "  \"" `mappend` ((BS.unpack.tokenSecret) accessToken) `mappend` "\""
   putStrLn $ ""
 
 handshake
@@ -58,7 +58,7 @@ main = do
       then return $ fromJust Config.accessToken
       else auth manager
     getIdCard Config.testConsumer manager accessToken
-  BSL.putStrLn (displayName user)
+  T.putStrLn (idCardDisplayName user)
 
 auth
   :: (MonadResource m, MonadBaseControl IO m)

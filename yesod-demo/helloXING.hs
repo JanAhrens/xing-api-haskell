@@ -9,12 +9,11 @@ import Web.XING
 import Network.HTTP.Conduit (newManager, def)
 import Data.Maybe (fromJust)
 import qualified Data.ByteString.Char8 as BS
-import qualified Data.ByteString.Lazy.Char8 as BSL
 import Data.Monoid (mappend)
 import Data.Text (Text)
-import Data.Text.Encoding as E
+import qualified Data.Text.Encoding as E
 import Data.Maybe (isJust, fromMaybe)
-import qualified Data.HashMap.Lazy as HM
+import qualified Data.Map as M
 
 import qualified Config
 
@@ -124,8 +123,8 @@ whoAmI
   -> Widget
 whoAmI idCard = do
   toWidget [hamlet|
-    <img src=#{BSL.unpack $ fromMaybe "" $ HM.lookup "large" (photoUrls idCard)}>
-    <p>Nice to meet you, #{BSL.unpack $ displayName idCard}.
+    <img src=#{fromMaybe "" $ M.lookup "large" (idCardPhotoUrls idCard)}>
+    <p>Nice to meet you, #{idCardDisplayName idCard}.
     <form method=POST action=@{LogoutR}>
       <input type=submit value="Logout">
   |]

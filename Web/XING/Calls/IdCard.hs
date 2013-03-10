@@ -4,16 +4,15 @@
 module Web.XING.Calls.IdCard
     (
       getIdCard
-    , IdCard(..)
     , demoIdCard
     , demoIdCard'
+    , IdCard(..)
     ) where
 
 import Web.XING.Types
 import Web.XING.API
 
 import qualified Data.ByteString.Lazy.Char8 as BSL
-import Data.HashMap.Lazy (HashMap)
 import Network.HTTP.Conduit (Response(..))
 import Control.Monad.Trans.Control (MonadBaseControl)
 import Control.Monad.Trans.Resource (MonadResource)
@@ -21,6 +20,8 @@ import Control.Exception (throw)
 import Control.Applicative ((<$>), (<*>))
 import Data.Aeson ( encode, decode, FromJSON(..), Value(..)
                   , object, (.:), (.=) )
+import Data.Text (Text)
+import Data.Map (Map)
 
 getIdCard
   :: (MonadResource m, MonadBaseControl IO m)
@@ -35,10 +36,10 @@ getIdCard oa manager cr = do
     Nothing -> throw Mapping
 
 data IdCard = IdCard {
-    id          :: BSL.ByteString
-  , displayName :: BSL.ByteString
-  , permalink   :: BSL.ByteString
-  , photoUrls   :: HashMap BSL.ByteString BSL.ByteString
+    idCardId          :: Text
+  , idCardDisplayName :: Text
+  , idCardPermalink   :: Text
+  , idCardPhotoUrls   :: Map Text Text
 } deriving (Show, Eq)
 
 instance FromJSON IdCard where

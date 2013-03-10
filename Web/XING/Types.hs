@@ -22,6 +22,7 @@ import Network.HTTP.Types (Status)
 import Control.Exception (Exception)
 import Data.Typeable (Typeable)
 
+
 data APIError
   = OAuthError String
   | TokenError String
