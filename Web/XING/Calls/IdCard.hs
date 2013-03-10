@@ -9,26 +9,30 @@ module Web.XING.Calls.IdCard
     , demoIdCard'
     ) where
 
+import Web.XING.Types
 import Web.XING.API
-import Web.XING.Auth
+
 import qualified Data.ByteString.Lazy.Char8 as BSL
-import Control.Monad.Trans.Resource (MonadResource, MonadBaseControl)
-import Control.Applicative ((<$>), (<*>))
-import Data.Aeson
-    ( (.:), decode, FromJSON(..), Value(..)
-    , object, (.=), encode
-    )
 import Data.HashMap.Lazy (HashMap)
 import Network.HTTP.Conduit (Response(..))
+import Control.Monad.Trans.Control (MonadBaseControl)
+import Control.Monad.Trans.Resource (MonadResource)
+import Control.Exception (throw)
+import Control.Applicative ((<$>), (<*>))
+import Data.Aeson ( encode, decode, FromJSON(..), Value(..)
+                  , object, (.:), (.=) )
 
-getIdCard :: (MonadResource m, MonadBaseControl IO m)
-          => OAuth
-          -> Manager
-          -> Credential
-          -> m (Maybe IdCard)
+getIdCard
+  :: (MonadResource m, MonadBaseControl IO m)
+  => OAuth
+  -> Manager
+  -> AccessToken
+  -> m IdCard
 getIdCard oa manager cr = do
   Response _ _ _ body <- apiRequest oa manager cr "GET" "/v1/users/me/id_card"
-  return $ decode body
+  case decode body of
+    Just a -> return a
+    Nothing -> throw Mapping
 
 data IdCard = IdCard {
     id          :: BSL.ByteString
@@ -46,6 +50,7 @@ instance FromJSON IdCard where
            <*> (container .: "photo_urls")
   parseJSON _ = fail "no parse"
 
+-- https://dev.xing.com/docs/get/users/me/id_card
 demoIdCard :: Value
 demoIdCard = object [
     "id_card" .= object [

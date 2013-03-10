@@ -5,25 +5,24 @@
 module Web.XING.API
     ( -- * API request interface
       apiRequest
-    , withAPI
     , apiBaseUrl
     ) where
 
-import Web.XING.Auth
-import Network.HTTP.Types (Method)
-import Network.HTTP.Conduit
-    ( Response(..), Request(..), parseUrl, httpLbs
-    , withManager, HttpException(..)
-    )
-import Control.Monad.Trans.Resource (MonadResource, MonadBaseControl)
-import Data.Maybe (fromJust)
-import Data.Monoid (mappend)
-import Control.Monad.IO.Class (liftIO)
-import Control.Monad.Trans.Resource (ResourceT)
-import Network.HTTP.Types (Status(..))
-import qualified Control.Exception as E
-import qualified Data.ByteString.Char8 as BS
+import           Network.HTTP.Types (Method)
+import           Network.HTTP.Conduit
+                   (Response(..), Request(..), parseUrl, httpLbs)
+import           Data.Maybe (fromJust)
+import           Data.Monoid (mappend)
+import qualified Data.ByteString.Char8      as BS
 import qualified Data.ByteString.Lazy.Char8 as BSL
+import           Control.Monad.Trans.Control (MonadBaseControl)
+import           Control.Monad.Trans.Resource (MonadResource)
+import           Web.XING.Types
+import           Web.XING.API.Error
+import           Web.XING.Auth
+import qualified Control.Exception.Lifted as E
+import Control.Exception (throw)
+import Network.HTTP.Conduit (HttpException(StatusCodeException))
 
 apiBaseUrl :: BS.ByteString
 apiBaseUrl = "https://api.xing.com"
@@ -32,21 +31,12 @@ apiRequest
   :: (MonadResource m, MonadBaseControl IO m)
   => OAuth
   -> Manager
-  -> Credential
+  -> AccessToken
   -> Method
   -> BS.ByteString
   -> m (Response BSL.ByteString)
 apiRequest oa manager cr m uri  = do
   let req = fromJust $ parseUrl $ BS.unpack (apiBaseUrl `mappend` uri)
   req' <- signOAuth oa cr req{method = m}
-  rsp <- httpLbs req' manager
-  return rsp
-
-withAPI
-  :: (Manager -> ResourceT IO ())
-  -> IO ()
-withAPI main = do
-  E.catch (withManager main) (\(e::HttpException) -> liftIO $ handleError e)
-  where
-    handleError (StatusCodeException status _) = putStrLn $ "Failed with code: " ++ show (statusCode status)
-    handleError e                              = putStrLn $ "Something unexcepted happened: " ++ show e
+  E.catch (httpLbs req' manager)
+    (\(StatusCodeException status headers) -> throw $ handleError status headers (m `mappend` " " `mappend` uri))

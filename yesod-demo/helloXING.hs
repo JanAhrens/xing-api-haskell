@@ -24,13 +24,10 @@ mkYesod "HelloXING" [parseRoutes|
 getHomeR :: Handler RepHtml
 getHomeR = do
   yesod <- getYesod
-  maybeIdCard <- getIdCard Config.testConsumer (httpManager yesod) (fromJust Config.accessToken)
+  idCard <- getIdCard Config.testConsumer (httpManager yesod) (fromJust Config.accessToken)
   defaultLayout [whamlet|
     <h1>Hello XING
-    $maybe idCard <- maybeIdCard
-      <p>Nice to meet you, #{unpack $ displayName idCard}.
-    $nothing
-      <p>Sorry but something went wrong.
+    <p>Nice to meet you, #{unpack $ displayName idCard}.
   |]
 
 main :: IO ()

@@ -3,7 +3,7 @@ module Config
   (testConsumer, accessToken)
 where
 
-import Web.XING.Auth
+import Web.XING
 
 testConsumer :: OAuth
 testConsumer = consumer
