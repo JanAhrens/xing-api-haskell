@@ -1,7 +1,8 @@
 dist
 *.hi
 *.o
-Config.hs
+/demos/Config.hs
+client_session_key.aes
 
 # vim temp files
 *.swp
