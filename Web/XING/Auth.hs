@@ -13,6 +13,7 @@ module Web.XING.Auth
       -- * re-export of some Web.Authenticate.OAuth functions
     , signOAuth
     , newCredential
+    , oauthCallback
     ) where
 
 import Prelude

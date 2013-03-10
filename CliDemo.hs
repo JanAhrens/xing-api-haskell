@@ -44,7 +44,7 @@ handshake
   :: (MonadResource m, MonadBaseControl IO m)
   => OAuth
   -> Manager
-  -> m (RequestToken, URL)
+  -> m (AccessToken, ByteString)
 handshake oa manager = do
   (requestToken, url) <- getRequestToken oa manager
   verifier <- liftIO $ readVerifier url
