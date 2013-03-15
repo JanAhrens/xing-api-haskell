@@ -14,15 +14,15 @@ synopsis:            Wrapper for the XING API
 description:
   This library is currently under development and not considered stable.
   .
-  The source repository includes a demo program called CliDemo.hs.
-  To use the demo, you have to obtain an API consumer key from
-  https://dev.xing.com and create a Config.hs file.
+  The source repository includes some demo programs in the demos directory.
+  To use the demos, you have to obtain an API consumer key from
+  https://dev.xing.com and create a demos/Config.hs file.
   The Config.hs.template file is recommended to be used as a template.
   .
-      > cp Config.hs.template Config.hs
+      > cp demos/Config.hs.template demos/Config.hs
 
 library
-  exposed-modules: Web.XING
+  exposed-modules: Web.XING Yesod.Auth.XING
   ghc-options:     -Wall
 
   build-depends: base                 ==4.5.*
@@ -39,9 +39,11 @@ library
                , transformers         ==0.2.*
                , bytestring           ==0.9.*
                , aeson                ==0.6.*
-               , yesod                ==1.1.*
                , lifted-base          ==0.2.*
                , monad-control        ==0.3.*
+               , yesod-core           ==1.1.*
+               , yesod-auth           ==1.1.*
+               , hamlet               ==1.1.*
 
 source-repository head
   type:        git

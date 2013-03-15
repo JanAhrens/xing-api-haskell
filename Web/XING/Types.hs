@@ -9,15 +9,15 @@ module Web.XING.Types
     , URL
       -- * reexports
     , Manager
-    , OAuth
-    , Credential
+    , OAuth(..)
+    , Credential(..)
     , BS.ByteString
     , Status
     ) where
 
 import Network.HTTP.Conduit (Manager)
 import qualified Data.ByteString as BS
-import Web.Authenticate.OAuth (OAuth, Credential)
+import Web.Authenticate.OAuth (OAuth(..), Credential(..))
 import Network.HTTP.Types (Status)
 import Control.Exception (Exception)
 import Data.Typeable (Typeable)
