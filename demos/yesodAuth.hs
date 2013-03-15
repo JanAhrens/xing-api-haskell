@@ -6,7 +6,7 @@
 
 import Yesod
 import Yesod.Auth.XING
-import Yesod.Auth (YesodAuth(..), maybeAuthId, getAuth, Auth, Route(LoginR, LogoutR),
+import Yesod.Auth (YesodAuth(..), maybeAuthId, getAuth, Auth, Route(PluginR, LogoutR),
                     AuthId, credsIdent, Creds(..))
 import Network.HTTP.Conduit (newManager, def)
 import Data.Text (Text)
@@ -39,17 +39,34 @@ instance RenderMessage XINGAuth FormMessage where
 getRootR :: Handler RepHtml
 getRootR = do
   maid <- maybeAuthId
+  widget <- case maid of
+    Just a -> return $ whoAmI a
+    Nothing -> return pleaseLogIn
   defaultLayout [whamlet|
-    <p>Your current auth ID: #{show maid}
-    $maybe _ <- maid
-      <p>
-        <a href=@{AuthR LogoutR}>Logout
-    $nothing
-      <p>
-        <a href=@{AuthR LoginR}>Go to the login page
+    <h1>Hello
+    ^{widget}
+  |]
+
+
+pleaseLogIn :: Widget
+pleaseLogIn = do
+  let xingAuthRoute = AuthR $ PluginR "xing" ["forward"]
+  toWidget [hamlet|
+    <p>Hello unknown user. Please log-in.
+    <a href=@{xingAuthRoute}>Login with XING
+  |]
+
+whoAmI
+  :: (Show a)
+  => a
+  -> Widget
+whoAmI userId = do
+  toWidget [hamlet|
+    <p>Your current auth ID: #{show userId}
+    <a href=@{AuthR LogoutR}>Logout
   |]
 
 main :: IO ()
 main = do
-  man <- newManager def
-  warpDebug 3000 $ XINGAuth man
+  manager <- newManager def
+  warpDebug 3000 $ XINGAuth manager
