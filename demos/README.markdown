@@ -1,6 +1,6 @@
 # xing-api demos
 
-You should create a `Config.hs` file, using the `Config.hs.template` file as a template.
+You should create a `Config.hs` file, using the [Config.hs.template](Config.hs.template) file as a template.
 
 ## [CliDemo.hs](CliDemo.hs)
 
