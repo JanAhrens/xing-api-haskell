@@ -100,8 +100,8 @@ getHomeR = do
   widget <- case maybeAccessToken of
     Just accessToken -> do
       yesod <- getYesod
-      idCard <- getIdCard (oAuthConsumer yesod) (httpManager yesod) accessToken
-      return $ whoAmI idCard
+      users <- getUsers (oAuthConsumer yesod) (httpManager yesod) accessToken ["me"]
+      return $ whoAmI (head $ unUserList users)
 
     Nothing -> return pleaseLogIn
 

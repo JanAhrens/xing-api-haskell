@@ -7,8 +7,9 @@ module Web.XING.Calls.User
       , demoUser'
       , demoUsers
       , demoUsers'
-      , getUser
+      , getUsers
       , FullUser(..)
+      , UserList(..)
     ) where
 
 import Web.XING.Types
@@ -23,7 +24,7 @@ import Control.Monad.Trans.Resource (MonadResource)
 import Data.Monoid (mappend)
 import Control.Exception (throw)
 import Data.Text.Encoding (encodeUtf8)
-import Data.Text (Text)
+import Data.Text (Text, intercalate)
 
 data FullUser
   = FullUser
@@ -31,6 +32,9 @@ data FullUser
       Text
       PhotoUrls
   deriving (Show, Eq)
+
+newtype UserList = UserList { unUserList :: [FullUser] }
+  deriving (Show)
 
 instance User FullUser where
   userId      (FullUser uid _ _)  = uid
@@ -44,17 +48,25 @@ instance FromJSON FullUser where
              <*> (response .: "photo_urls")
   parseJSON _ = fail "no parse"
 
-getUser
+-- TODO: it would be nice, if instead of using the UserList hack, we could use:
+--   instance FromJSON [FullUser] where
+instance FromJSON UserList where
+  parseJSON (Object response) = do
+    users <- parseJSON =<< (response .: "users")
+    return $ UserList users
+  parseJSON _ = fail "no parse"
+
+getUsers
   :: (MonadResource m, MonadBaseControl IO m)
   => OAuth
   -> Manager
   -> AccessToken
-  -> Text
-  -> m FullUser
-getUser oa manager cr uid = do
-  Response _ _ _ body <- apiRequest oa manager cr "GET" ("/v1/users/me/" `mappend` encodeUtf8 uid)
+  -> [UserId]
+  -> m UserList
+getUsers oa manager cr uids = do
+  Response _ _ _ body <- apiRequest oa manager cr "GET" ("/v1/users/" `mappend` (encodeUtf8 $ intercalate "," uids))
   case decode body of
-    Just a -> return a
+    Just a  -> return a
     Nothing -> throw Mapping
 
 -- https://dev.xing.com/docs/get/users/:id
