@@ -8,14 +8,15 @@ module Web.XING.Calls.User
       , demoUsers
       , demoUsers'
       , getUser
-      , User(..)
+      , FullUser(..)
     ) where
 
 import Web.XING.Types
 import Web.XING.API
 import Data.Aeson ( encode, decode, Value(..)
-                  , object, (.=) )
+                  , object, (.=), FromJSON(..), (.:) )
 import qualified Data.ByteString.Lazy.Char8 as BSL
+import Control.Applicative ((<$>), (<*>))
 import Network.HTTP.Conduit (Response(..))
 import Control.Monad.Trans.Control (MonadBaseControl)
 import Control.Monad.Trans.Resource (MonadResource)
@@ -23,6 +24,25 @@ import Data.Monoid (mappend)
 import Control.Exception (throw)
 import Data.Text.Encoding (encodeUtf8)
 import Data.Text (Text)
+
+data FullUser
+  = FullUser
+      UserId
+      Text
+      PhotoUrls
+  deriving (Show, Eq)
+
+instance User FullUser where
+  userId      (FullUser uid _ _)  = uid
+  displayName (FullUser _ name _) = name
+  photoUrls   (FullUser _ _ urls) = urls
+
+instance FromJSON FullUser where
+  parseJSON (Object response) = do
+    FullUser <$> (response .: "id")
+             <*> (response .: "display_name")
+             <*> (response .: "photo_urls")
+  parseJSON _ = fail "no parse"
 
 getUser
   :: (MonadResource m, MonadBaseControl IO m)
