@@ -5,19 +5,20 @@ module Web.XING.Calls.User
     (
         demoUser
       , demoUser'
+      , demoUsers
+      , demoUsers'
       , getUser
       , User(..)
     ) where
 
 import Web.XING.Types
 import Web.XING.API
-import Data.Aeson ( encode, decode, FromJSON(..), Value(..)
-                  , object, (.:), (.=) )
+import Data.Aeson ( encode, decode, Value(..)
+                  , object, (.=) )
 import qualified Data.ByteString.Lazy.Char8 as BSL
 import Network.HTTP.Conduit (Response(..))
 import Control.Monad.Trans.Control (MonadBaseControl)
 import Control.Monad.Trans.Resource (MonadResource)
-import Control.Applicative ((<$>), (<*>))
 import Data.Monoid (mappend)
 import Control.Exception (throw)
 import Data.Text.Encoding (encodeUtf8)
@@ -29,26 +30,24 @@ getUser
   -> Manager
   -> AccessToken
   -> Text
-  -> m User
+  -> m FullUser
 getUser oa manager cr uid = do
   Response _ _ _ body <- apiRequest oa manager cr "GET" ("/v1/users/me/" `mappend` encodeUtf8 uid)
   case decode body of
     Just a -> return a
     Nothing -> throw Mapping
 
-data User = User {
-    userId :: Text
-} deriving (Show, Eq)
-
-instance FromJSON User where
-  parseJSON (Object response) = do
-    User <$> (response .: "id")
-  parseJSON _ = fail "no parse"
-
 -- https://dev.xing.com/docs/get/users/:id
+demoUsers :: Value
+demoUsers = object [
+    "users" .= [demoUser]
+  ]
+
+demoUsers' :: BSL.ByteString
+demoUsers' = encode demoUsers
+
 demoUser :: Value
 demoUser = object [
-    "users" .= [object [
         "id"           .= ("12345_abcdef" :: BSL.ByteString)
       , "first_name"   .= ("Max" :: BSL.ByteString)
       , "last_name"    .= ("Mustermann" :: BSL.ByteString)
@@ -189,7 +188,6 @@ demoUser = object [
         , "maxi_thumb"   .= ("http://www.xing.com/img/users/e/3/d/f94ef165a.123456,1.70x93.jpg"   :: BSL.ByteString)
       ]
     ]
-  ]]
 
 demoUser' :: BSL.ByteString
 demoUser' = encode demoUser

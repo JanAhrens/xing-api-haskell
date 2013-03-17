@@ -6,7 +6,6 @@ module Web.XING.Calls.IdCard
       getIdCard
     , demoIdCard
     , demoIdCard'
-    , IdCard(..)
     ) where
 
 import Web.XING.Types
@@ -17,39 +16,20 @@ import Network.HTTP.Conduit (Response(..))
 import Control.Monad.Trans.Control (MonadBaseControl)
 import Control.Monad.Trans.Resource (MonadResource)
 import Control.Exception (throw)
-import Control.Applicative ((<$>), (<*>))
-import Data.Aeson ( encode, decode, FromJSON(..), Value(..)
-                  , object, (.:), (.=) )
-import Data.Text (Text)
-import Data.Map (Map)
+import Data.Aeson ( encode, decode, Value(..)
+                  , object, (.=) )
 
 getIdCard
   :: (MonadResource m, MonadBaseControl IO m)
   => OAuth
   -> Manager
   -> AccessToken
-  -> m IdCard
+  -> m MinimalUser
 getIdCard oa manager cr = do
   Response _ _ _ body <- apiRequest oa manager cr "GET" "/v1/users/me/id_card"
   case decode body of
     Just a -> return a
     Nothing -> throw Mapping
-
-data IdCard = IdCard {
-    idCardId          :: Text
-  , idCardDisplayName :: Text
-  , idCardPermalink   :: Text
-  , idCardPhotoUrls   :: Map Text Text
-} deriving (Show, Eq)
-
-instance FromJSON IdCard where
-  parseJSON (Object response) = do
-    container <- response .: "id_card"
-    IdCard <$> (container .: "id")
-           <*> (container .: "display_name")
-           <*> (container .: "permalink")
-           <*> (container .: "photo_urls")
-  parseJSON _ = fail "no parse"
 
 -- https://dev.xing.com/docs/get/users/me/id_card
 demoIdCard :: Value

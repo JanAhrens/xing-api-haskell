@@ -30,9 +30,9 @@ readVerifier url = do
 showAccessToken
   :: (AccessToken, ByteString)
   -> IO ()
-showAccessToken (accessToken, userId) = do
+showAccessToken (accessToken, uid) = do
   putStrLn $ ""
-  putStrLn $ "Hello " `mappend` (BS.unpack userId) `mappend` "!"
+  putStrLn $ "Hello " `mappend` (BS.unpack uid) `mappend` "!"
   putStrLn $ "You should put your access token in Config.hs:"
   putStrLn $ ""
   putStrLn $ "accessToken = Just $ newCredential"
@@ -58,13 +58,13 @@ main = do
       then return $ fromJust Config.accessToken
       else auth manager
     getIdCard Config.testConsumer manager accessToken
-  T.putStrLn (idCardDisplayName user)
+  T.putStrLn (displayName user)
 
 auth
   :: (MonadResource m, MonadBaseControl IO m)
   => Manager
   -> m RequestToken
 auth manager = do
-  (accessToken, userId) <- handshake Config.testConsumer manager
-  liftIO $ showAccessToken (accessToken, userId)
+  res@(accessToken, _) <- handshake Config.testConsumer manager
+  liftIO $ showAccessToken res
   return accessToken

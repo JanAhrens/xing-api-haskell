@@ -80,8 +80,8 @@ xingAuth key secret = AuthPlugin name dispatch login
       maybeRequestToken <- getTokenFromSession "request"
       master <- getYesod
       let manager = authHttpManager master
-      (accessToken, userId) <- getAccessToken (fromJust maybeRequestToken) verifier oauth manager
-      let creds = Creds name (decodeUtf8 userId) (map (bsToText *** bsToText) (unCredential accessToken))
+      (accessToken, uid) <- getAccessToken (fromJust maybeRequestToken) verifier oauth manager
+      let creds = Creds name (decodeUtf8 uid) (map (bsToText *** bsToText) (unCredential accessToken))
       setCreds True creds
 
     dispatch _ _ = notFound

@@ -67,8 +67,8 @@ getRootR = do
     |]
     [whamlet|
       <h1>Welcome to the XING API demo
-      $maybe userId <- maid
-        <p>Nice to meet you, #{show userId}
+      $maybe aid <- maid
+        <p>Nice to meet you, #{show aid}
         <a href=@{AuthR LogoutR}>Logout
       $nothing
         <p>Hello unknown user. Please log-in.

@@ -122,12 +122,13 @@ pleaseLogIn =
   |]
 
 whoAmI
-  :: IdCard
+  :: User a
+  => a
   -> Widget
-whoAmI idCard = do
+whoAmI user = do
   toWidget [hamlet|
-    <img src=#{fromMaybe "" $ M.lookup "large" (idCardPhotoUrls idCard)}>
-    <p>Nice to meet you, #{idCardDisplayName idCard}.
+    <img src=#{fromMaybe "" $ M.lookup "large" (photoUrls user)}>
+    <p>Nice to meet you, #{displayName user}.
     <form method=POST action=@{LogoutR}>
       <input type=submit value="Logout">
   |]
