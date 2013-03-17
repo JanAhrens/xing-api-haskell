@@ -5,13 +5,15 @@
 {-# LANGUAGE TypeFamilies #-}
 
 import Yesod
+import Yesod.Auth
 import Yesod.Auth.XING
-import Yesod.Auth (YesodAuth(..), maybeAuthId, getAuth, Auth, Route(PluginR, LogoutR),
-                    AuthId, credsIdent, Creds(..))
+import qualified Yesod.Auth.Message as Msg
 import Network.HTTP.Conduit (newManager, def)
 import Data.Text (Text)
-
+import Text.Hamlet (shamlet)
+import Data.Monoid (mappend)
 import qualified Config
+import qualified YesodHelper as Helper
 
 data XINGAuth = XINGAuth {
   httpManager :: Manager
@@ -19,17 +21,31 @@ data XINGAuth = XINGAuth {
 
 instance Yesod XINGAuth where
   approot = ApprootStatic "http://localhost:3000"
+  defaultLayout = Helper.bootstrapLayout
 
 mkYesod "XINGAuth" [parseRoutes|
   / RootR GET
   /auth AuthR Auth getAuth
 |]
 
+alertMessage
+  :: (RenderMessage y msg)
+  => msg
+  -> GHandler sub y ()
+alertMessage message = do
+  mr <- getMessageRender
+  setMessage [shamlet|
+    <div .alert .alert-success>
+      <button type=button class=close data-dismiss=alert>&times;
+      #{mr message}
+  |]
+
 instance YesodAuth XINGAuth where
   type AuthId XINGAuth = Text
-  getAuthId       = return . Just . credsIdent
+  getAuthId creds = return $ lookup "oauth_token" (credsExtra creds)
   loginDest _     = RootR
   logoutDest _    = RootR
+  onLogin         = alertMessage Msg.NowLoggedIn
   authPlugins _   = [xingAuth (oauthConsumerKey Config.testConsumer) (oauthConsumerSecret Config.testConsumer)]
   authHttpManager = httpManager
 
@@ -39,32 +55,25 @@ instance RenderMessage XINGAuth FormMessage where
 getRootR :: Handler RepHtml
 getRootR = do
   maid <- maybeAuthId
-  widget <- case maid of
-    Just a -> return $ whoAmI a
-    Nothing -> return pleaseLogIn
-  defaultLayout [whamlet|
-    <h1>Hello
-    ^{widget}
-  |]
-
-
-pleaseLogIn :: Widget
-pleaseLogIn = do
-  let xingAuthRoute = AuthR $ PluginR "xing" ["forward"]
-  toWidget [hamlet|
-    <p>Hello unknown user. Please log-in.
-    <a href=@{xingAuthRoute}>Login with XING
-  |]
-
-whoAmI
-  :: (Show a)
-  => a
-  -> Widget
-whoAmI userId = do
-  toWidget [hamlet|
-    <p>Your current auth ID: #{show userId}
-    <a href=@{AuthR LogoutR}>Logout
-  |]
+  defaultLayout $ do
+    addScriptRemote "http://code.jquery.com/jquery-1.9.1.min.js"
+    addStylesheetRemote $ Helper.bootstrapCDN `mappend` "/css/bootstrap-combined.min.css"
+    addScriptRemote     $ Helper.bootstrapCDN `mappend` "/js/bootstrap.min.js"
+    setTitle "XING API demo"
+    toWidget [julius|
+      $(window).ready(function () {
+        $('.alert').alert();
+      });
+    |]
+    [whamlet|
+      <h1>Welcome to the XING API demo
+      $maybe userId <- maid
+        <p>Nice to meet you, #{show userId}
+        <a href=@{AuthR LogoutR}>Logout
+      $nothing
+        <p>Hello unknown user. Please log-in.
+        <a href=@{AuthR xingLoginRoute}>Login with XING
+    |]
 
 main :: IO ()
 main = do

@@ -6,6 +6,7 @@
 
 module Yesod.Auth.XING (
     xingAuth
+  , xingLoginRoute
   , module Web.XING
 ) where
 
@@ -14,7 +15,7 @@ import Web.XING
 import Yesod.Handler (setSessionBS, getYesod, lift, getUrlRender, getRouteToMaster, GHandler, lookupSessionBS, redirect, notFound)
 import Yesod.Request (lookupGetParam)
 import Yesod.Auth (AuthPlugin(..), YesodAuth(..), Route(PluginR),
-                    setCreds, Creds(..))
+                    setCreds, Creds(..), Auth)
 import Text.Hamlet (shamlet)
 import Yesod.Widget (toWidget)
 import Data.Text (Text)
@@ -49,6 +50,9 @@ getTokenFromSession name = do
     then return $ Just (newCredential (fromJust maybeToken) (fromJust maybeSecret))
     else return Nothing
 
+xingLoginRoute :: Route Auth
+xingLoginRoute = PluginR "xing" ["forward"]
+
 xingAuth
   :: YesodAuth m
   => BS.ByteString -- ^ key
@@ -77,7 +81,7 @@ xingAuth key secret = AuthPlugin name dispatch login
       master <- getYesod
       let manager = authHttpManager master
       (accessToken, userId) <- getAccessToken (fromJust maybeRequestToken) verifier oauth manager
-      let creds = Creds name (decodeUtf8 $ userId) $ map (bsToText *** bsToText) (unCredential accessToken)
+      let creds = Creds name (decodeUtf8 userId) (map (bsToText *** bsToText) (unCredential accessToken))
       setCreds True creds
 
     dispatch _ _ = notFound

@@ -14,7 +14,7 @@ import Data.Text (Text)
 import qualified Data.Text.Encoding as E
 import Data.Maybe (isJust, fromMaybe)
 import qualified Data.Map as M
-
+import qualified YesodHelper as Helper
 import qualified Config
 
 data HelloXING = HelloXING {
@@ -22,7 +22,8 @@ data HelloXING = HelloXING {
   , oAuthConsumer :: OAuth
 }
 
-instance Yesod HelloXING
+instance Yesod HelloXING where
+  defaultLayout = Helper.bootstrapLayout
 
 mkYesod "HelloXING" [parseRoutes|
 / HomeR GET
@@ -104,10 +105,12 @@ getHomeR = do
 
     Nothing -> return pleaseLogIn
 
-  defaultLayout [whamlet|
-    <h1>Welcome to the XING API demo
-    ^{widget}
-  |]
+  defaultLayout $ do
+    addStylesheetRemote $ Helper.bootstrapCDN `mappend` "/css/bootstrap-combined.min.css"
+    [whamlet|
+      <h1>Welcome to the XING API demo
+      ^{widget}
+    |]
 
 pleaseLogIn :: Widget
 pleaseLogIn =

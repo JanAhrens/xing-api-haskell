@@ -41,9 +41,10 @@ library
                , aeson                ==0.6.*
                , lifted-base          ==0.2.*
                , monad-control        ==0.3.*
-               , yesod-core           ==1.1.*
-               , yesod-auth           ==1.1.*
-               , hamlet               ==1.1.*
+
+               , yesod-core           >=1.1 && < 1.2
+               , yesod-auth           >=1.1 && < 1.2
+               , hamlet               >=1.1 && < 1.2
 
 source-repository head
   type:        git
