@@ -4,17 +4,17 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE TypeFamilies #-}
 
-import Yesod
-import Web.XING
-import Network.HTTP.Conduit (newManager, def)
-import Data.Maybe (fromJust)
-import qualified Data.ByteString.Char8 as BS
-import Data.Monoid (mappend)
-import Data.Text (Text)
-import qualified Data.Text.Encoding as E
-import Data.Maybe (isJust, fromMaybe)
+import           Yesod
+import           Web.XING
+import           Network.HTTP.Conduit (newManager, def)
+import           Data.Maybe (fromJust, isJust, fromMaybe)
 import qualified Data.Map as M
-import qualified YesodHelper as Helper
+import           YesodHelper ( bootstrapLayout, bootstrapCDN
+                             , writeTokenToSession, getTokenFromSession
+                             , deleteTokenFromSession )
+import qualified Data.ByteString.Char8 as BS
+import           Data.Monoid (mappend)
+import qualified Data.Text.Encoding as E
 import qualified Config
 
 data HelloXING = HelloXING {
@@ -23,39 +23,14 @@ data HelloXING = HelloXING {
 }
 
 instance Yesod HelloXING where
-  defaultLayout = Helper.bootstrapLayout
+  defaultLayout = bootstrapLayout
 
 mkYesod "HelloXING" [parseRoutes|
-/ HomeR GET
-/handshake HandshakeR POST
-/callback CallbackR GET
-/logout LogoutR POST
+  / HomeR GET
+  /handshake HandshakeR POST
+  /callback CallbackR GET
+  /logout LogoutR POST
 |]
-
-writeTokenToSession
-  :: Text
-  -> Credential
-  -> Handler ()
-writeTokenToSession name credential = do
-  setSessionBS (name `mappend` "Token") (token credential)
-  setSessionBS (name `mappend` "Secret") (tokenSecret credential)
-
-getTokenFromSession
-  :: Text
-  -> Handler (Maybe Credential)
-getTokenFromSession name = do
-  maybeToken  <- lookupSessionBS (name `mappend` "Token")
-  maybeSecret <- lookupSessionBS (name `mappend` "Secret")
-  if (isJust maybeToken && isJust maybeSecret)
-    then return $ Just (newCredential (fromJust maybeToken) (fromJust maybeSecret))
-    else return Nothing
-
-deleteTokenFromSession
-  :: Text
-  -> Handler ()
-deleteTokenFromSession name = do
-  deleteSession (name `mappend` "Token")
-  deleteSession (name `mappend` "Secret")
 
 postHandshakeR :: Handler RepHtml
 postHandshakeR = do
@@ -106,7 +81,7 @@ getHomeR = do
     Nothing -> return pleaseLogIn
 
   defaultLayout $ do
-    addStylesheetRemote $ Helper.bootstrapCDN `mappend` "/css/bootstrap-combined.min.css"
+    addStylesheetRemote $ bootstrapCDN `mappend` "/css/bootstrap-combined.min.css"
     [whamlet|
       <h1>Welcome to the XING API demo
       ^{widget}

@@ -4,16 +4,15 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE TypeFamilies #-}
 
-import Yesod
-import Yesod.Auth
-import Yesod.Auth.XING
+import           Yesod
+import           Yesod.Auth
+import           Yesod.Auth.XING
 import qualified Yesod.Auth.Message as Msg
-import Network.HTTP.Conduit (newManager, def)
-import Data.Text (Text)
-import Text.Hamlet (shamlet)
-import Data.Monoid (mappend)
+import           Network.HTTP.Conduit (newManager, def)
+import           Data.Text (Text)
+import           Data.Monoid (mappend)
 import qualified Config
-import qualified YesodHelper as Helper
+import           YesodHelper (bootstrapCDN, bootstrapLayout, alertMessage)
 
 data XINGAuth = XINGAuth {
   httpManager :: Manager
@@ -21,24 +20,12 @@ data XINGAuth = XINGAuth {
 
 instance Yesod XINGAuth where
   approot = ApprootStatic "http://localhost:3000"
-  defaultLayout = Helper.bootstrapLayout
+  defaultLayout = bootstrapLayout
 
 mkYesod "XINGAuth" [parseRoutes|
   / RootR GET
   /auth AuthR Auth getAuth
 |]
-
-alertMessage
-  :: (RenderMessage y msg)
-  => msg
-  -> GHandler sub y ()
-alertMessage message = do
-  mr <- getMessageRender
-  setMessage [shamlet|
-    <div .alert .alert-success>
-      <button type=button class=close data-dismiss=alert>&times;
-      #{mr message}
-  |]
 
 instance YesodAuth XINGAuth where
   type AuthId XINGAuth = Text
@@ -57,8 +44,8 @@ getRootR = do
   maid <- maybeAuthId
   defaultLayout $ do
     addScriptRemote "http://code.jquery.com/jquery-1.9.1.min.js"
-    addStylesheetRemote $ Helper.bootstrapCDN `mappend` "/css/bootstrap-combined.min.css"
-    addScriptRemote     $ Helper.bootstrapCDN `mappend` "/js/bootstrap.min.js"
+    addStylesheetRemote $ bootstrapCDN `mappend` "/css/bootstrap-combined.min.css"
+    addScriptRemote     $ bootstrapCDN `mappend` "/js/bootstrap.min.js"
     setTitle "XING API demo"
     toWidget [julius|
       $(window).ready(function () {
