@@ -22,10 +22,8 @@ import qualified Data.ByteString as BS
 
 import Web.Authenticate.OAuth hiding (getAccessToken)
 import qualified Web.XING.Internal.AuthenticateOAuthPatch as Patch
-import Control.Exception (throw)
 import Control.Monad.Trans.Control (MonadBaseControl)
 import Control.Monad.Trans.Resource (MonadResource)
-import Network.HTTP.Conduit (HttpException(StatusCodeException))
 
 import Data.Maybe (fromMaybe)
 
@@ -54,7 +52,7 @@ getRequestToken
  -> m (RequestToken, URL)
 getRequestToken oa manager = E.catch
     tryToGetRequestToken
-    (\(StatusCodeException status headers) -> throw $ handleError status headers "POST /v1/request_token")
+    (handleStatusCodeException "POST /v1/request_token")
   where
     tryToGetRequestToken = do
       cred <- Patch.getTemporaryCredential' id oa manager
@@ -69,7 +67,7 @@ getAccessToken
   -> m (Credential, BS.ByteString)
 getAccessToken requestToken verifier oa manager = E.catch
     tryToExchangeRequestToken
-    (\(StatusCodeException status headers) -> throw $ handleError status headers "POST /v1/access_token")
+    (handleStatusCodeException "POST /v1/access_token")
   where
     tryToExchangeRequestToken = do
       accessToken <- Patch.getAccessToken' id oa ((injectVerifier verifier) requestToken) manager

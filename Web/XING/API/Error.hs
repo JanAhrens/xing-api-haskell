@@ -4,6 +4,7 @@ module Web.XING.API.Error
     (
       mapError
     , handleError
+    , handleStatusCodeException
     ) where
 
 import Web.XING.Types
@@ -12,6 +13,8 @@ import Data.Maybe (fromMaybe)
 import qualified Data.ByteString.Lazy.Char8 as BSL
 import Control.Applicative ((<$>), (<*>))
 import Data.Aeson (decode, FromJSON(parseJSON), Value(Object) , (.:))
+import Control.Exception (throw)
+import Network.HTTP.Conduit (HttpException(StatusCodeException))
 
 mapError
   :: XINGError
@@ -38,6 +41,13 @@ instance FromJSON XINGError where
     XINGError <$> (response .: "error_name")
               <*> (response .: "message")
   parseJSON _ = fail "no parse"
+
+handleStatusCodeException
+  :: ByteString
+  -> HttpException
+  -> a
+handleStatusCodeException call (StatusCodeException status headers) = throw $ handleError status headers call
+handleStatusCodeException _    e                                    = throw e
 
 handleError
   :: Status
