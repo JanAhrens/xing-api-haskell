@@ -29,7 +29,8 @@ import Data.Text (Text, intercalate)
 data FullUser
   = FullUser
       UserId
-      Text
+      Text -- ^ display_name
+      Text -- ^ permalink
       PhotoUrls
   deriving (Show, Eq)
 
@@ -37,14 +38,16 @@ newtype UserList = UserList { unUserList :: [FullUser] }
   deriving (Show)
 
 instance User FullUser where
-  userId      (FullUser uid _ _)  = uid
-  displayName (FullUser _ name _) = name
-  photoUrls   (FullUser _ _ urls) = urls
+  userId      (FullUser uid _ _ _)  = uid
+  displayName (FullUser _ name _ _) = name
+  permalink   (FullUser _ _ link _) = link
+  photoUrls   (FullUser _ _ _ urls) = urls
 
 instance FromJSON FullUser where
   parseJSON (Object response) = do
     FullUser <$> (response .: "id")
              <*> (response .: "display_name")
+             <*> (response .: "permalink")
              <*> (response .: "photo_urls")
   parseJSON _ = fail "no parse"
 

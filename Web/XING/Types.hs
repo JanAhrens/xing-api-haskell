@@ -48,4 +48,5 @@ type PhotoUrls    = Map Text Text
 class User a where
   userId      :: a -> UserId
   displayName :: a -> Text
+  permalink   :: a -> Text
   photoUrls   :: a -> PhotoUrls

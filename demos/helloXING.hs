@@ -102,8 +102,9 @@ whoAmI
   -> Widget
 whoAmI user = do
   toWidget [hamlet|
-    <img src=#{fromMaybe "" $ M.lookup "large" (photoUrls user)}>
-    <p>Nice to meet you, #{displayName user}.
+    <img src=#{fromMaybe "" $ M.lookup "maxi_thumb" (photoUrls user)}>
+    <p>
+      <a href=#{permalink user}>#{displayName user}
     <form method=POST action=@{LogoutR}>
       <input type=submit value="Logout">
   |]

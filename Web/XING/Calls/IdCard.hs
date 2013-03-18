@@ -24,14 +24,15 @@ import Control.Applicative ((<*>), (<$>))
 data MinimalUser
   = MinimalUser
       UserId
-      Text
-      Text
+      Text -- ^ display_name
+      Text -- ^ permalink
       PhotoUrls
   deriving (Show, Eq)
 
 instance User MinimalUser where
   userId (MinimalUser uid _ _ _ )      = uid
   displayName (MinimalUser _ name _ _) = name
+  permalink (MinimalUser _ _ link _)   = link
   photoUrls (MinimalUser _ _ _ urls)   = urls
 
 instance FromJSON MinimalUser where
