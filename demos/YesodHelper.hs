@@ -33,7 +33,8 @@ bootstrapLayout widget = do
           <title>#{pageTitle pc}
           ^{pageHead pc}
         <body>
-          <div .container>
+          <div .hero-unit>
+            <h1>#{pageTitle pc}
             $maybe msg <- mmsg
               #{msg}
             ^{pageBody pc}
@@ -46,7 +47,7 @@ alertMessage
 alertMessage message = do
   mr <- getMessageRender
   setMessage [shamlet|
-    <div .alert .alert-success>
+    <p .alert .alert-success>
       <button type=button class=close data-dismiss=alert>&times;
       #{mr message}
   |]

@@ -49,17 +49,24 @@ getRootR = do
     setTitle "XING API demo"
     toWidget [julius|
       $(window).ready(function () {
-        $('.alert').alert().delay(3000).animate({opacity: 0}, function() { $(this).hide(); });
+        $('.alert').alert();
+        setTimeout(function () {
+          $('.alert .close').click();
+        }, 3000);
       });
     |]
     [whamlet|
-      <h1>Welcome to the XING API demo
       $maybe aid <- maid
         <p>Nice to meet you, #{show aid}
-        <a href=@{AuthR LogoutR}>Logout
+        <p>
+          <a.btn href=@{AuthR LogoutR}>
+            Logout
       $nothing
         <p>Hello unknown user. Please log-in.
-        <a href=@{AuthR xingLoginRoute}>Login with XING
+        <p>
+          <a.btn.btn-primary href=@{AuthR xingLoginRoute}>
+            <i.icon-user.icon-white>
+            Login with XING
     |]
 
 main :: IO ()
