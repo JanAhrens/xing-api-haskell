@@ -49,7 +49,7 @@ getRootR = do
     setTitle "XING API demo"
     toWidget [julius|
       $(window).ready(function () {
-        $('.alert').alert();
+        $('.alert').alert().delay(3000).animate({opacity: 0}, function() { $(this).hide(); });
       });
     |]
     [whamlet|
