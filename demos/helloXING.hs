@@ -15,6 +15,7 @@ import           YesodHelper ( bootstrapLayout, bootstrapCDN
 import qualified Data.ByteString.Char8 as BS
 import           Data.Monoid (mappend)
 import qualified Data.Text.Encoding as E
+import Data.Time
 import qualified Config
 
 data HelloXING = HelloXING {
@@ -68,6 +69,28 @@ postLogoutR = do
   deleteTokenFromSession "request"
   redirect HomeR
 
+daysUntilBirthday
+  :: Maybe BirthDate
+  -> Day
+  -> Integer
+daysUntilBirthday (Just (DayOnly birthMonth birthDay)) today    = calcDays birthMonth birthDay today
+daysUntilBirthday (Just (FullDate _ birthMonth birthDay)) today = calcDays birthMonth birthDay today
+daysUntilBirthday Nothing _                                     = 0
+
+calcDays
+  :: Int
+  -> Int
+  -> Day
+  -> Integer
+calcDays birthMonth birthDay today
+  = if (birthDayThisYear >= 0)
+      then birthDayThisYear
+      else birthDayNextYear
+  where
+    (year, _, _)     = toGregorian today
+    birthDayThisYear = diffDays (fromGregorian (year    ) birthMonth birthDay) today
+    birthDayNextYear = diffDays (fromGregorian (year + 1) birthMonth birthDay) today
+
 getHomeR :: Handler RepHtml
 getHomeR = do
   maybeAccessToken <- getTokenFromSession "access"
@@ -76,7 +99,10 @@ getHomeR = do
     Just accessToken -> do
       yesod <- getYesod
       users <- getUsers (oAuthConsumer yesod) (httpManager yesod) accessToken ["me"]
-      return $ whoAmI (head $ unUserList users)
+      today <- liftIO $ getCurrentTime
+      let firstUser = head $ unUserList users
+      let birthDayInDays = daysUntilBirthday (birthDate firstUser) (utctDay today)
+      return $ whoAmI firstUser birthDayInDays
 
     Nothing -> return pleaseLogIn
 
@@ -97,14 +123,16 @@ pleaseLogIn =
   |]
 
 whoAmI
-  :: User a
-  => a
+  :: FullUser
+  -> Integer
   -> Widget
-whoAmI user = do
+whoAmI user birthDayInDays = do
   toWidget [hamlet|
-    <img src=#{fromMaybe "" $ M.lookup "maxi_thumb" (photoUrls user)}>
+    <img src=#{fromMaybe "" $ M.lookup "large" (photoUrls user)}>
     <p>
       <a href=#{permalink user}>#{displayName user}
+    <p>
+      Your birthday is in #{show birthDayInDays} days.
     <form method=POST action=@{LogoutR}>
       <input type=submit value="Logout">
   |]

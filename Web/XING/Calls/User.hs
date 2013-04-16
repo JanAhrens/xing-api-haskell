@@ -1,5 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE FlexibleContexts  #-}
+{-# LANGUAGE FlexibleInstances  #-}
 
 module Web.XING.Calls.User
     (
@@ -8,48 +9,75 @@ module Web.XING.Calls.User
       , demoUsers
       , demoUsers'
       , getUsers
-      , FullUser(..)
+      , FullUser
       , UserList(..)
+      , BirthDate(..)
+      , birthDate
     ) where
 
 import Web.XING.Types
 import Web.XING.API
 import Data.Aeson ( encode, decode, Value(..)
-                  , object, (.=), FromJSON(..), (.:) )
+                  , object, (.=), FromJSON(..), (.:), (.:?) )
+import Data.Aeson.Types (parseMaybe)
 import qualified Data.ByteString.Lazy.Char8 as BSL
 import Control.Applicative ((<$>), (<*>))
 import Network.HTTP.Conduit (Response(..))
 import Control.Monad.Trans.Control (MonadBaseControl)
 import Control.Monad.Trans.Resource (MonadResource)
+import Control.Monad (mzero)
 import Data.Monoid (mappend)
 import Control.Exception (throw)
 import Data.Text.Encoding (encodeUtf8)
 import Data.Text (Text, intercalate)
 
+data BirthDate
+  = FullDate Integer Int Int
+  | DayOnly Int Int
+  deriving (Eq, Show)
+
 data FullUser
-  = FullUser
-      UserId
-      Text -- ^ display_name
-      Text -- ^ permalink
-      PhotoUrls
+  = FullUser {
+      _userId      :: UserId
+    , _displayName :: Text
+    , _permalink   :: Text
+    , _birthDate   :: Maybe BirthDate
+    , _photoUrls   :: PhotoUrls
+  }
   deriving (Show, Eq)
 
 newtype UserList = UserList { unUserList :: [FullUser] }
   deriving (Show)
 
 instance User FullUser where
-  userId      (FullUser uid _ _ _)  = uid
-  displayName (FullUser _ name _ _) = name
-  permalink   (FullUser _ _ link _) = link
-  photoUrls   (FullUser _ _ _ urls) = urls
+  userId      = _userId
+  displayName = _displayName
+  permalink   = _permalink
+  photoUrls   = _photoUrls
+
+birthDate
+  :: FullUser
+  -> Maybe BirthDate
+birthDate = _birthDate
+
+instance FromJSON BirthDate where
+  parseJSON (Object response) = do
+    maybeYear <- response .:? "year"
+    month     <- response .:  "month"
+    day       <- response .:  "day"
+    case maybeYear of
+      Just year -> return $ FullDate year month day
+      _         -> return $ DayOnly day month
+  parseJSON _ = mzero
 
 instance FromJSON FullUser where
   parseJSON (Object response) = do
     FullUser <$> (response .: "id")
              <*> (response .: "display_name")
              <*> (response .: "permalink")
+             <*> (return . (parseMaybe parseJSON) =<< response .: "birth_date")
              <*> (response .: "photo_urls")
-  parseJSON _ = fail "no parse"
+  parseJSON _ = mzero
 
 -- TODO: it would be nice, if instead of using the UserList hack, we could use:
 --   instance FromJSON [FullUser] where
@@ -57,7 +85,7 @@ instance FromJSON UserList where
   parseJSON (Object response) = do
     users <- parseJSON =<< (response .: "users")
     return $ UserList users
-  parseJSON _ = fail "no parse"
+  parseJSON _ = mzero
 
 getUsers
   :: (MonadResource m, MonadBaseControl IO m)

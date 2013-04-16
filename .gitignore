@@ -1,7 +1,7 @@
 dist
 *.hi
 *.o
-/demos/Config.hs
+demos/Config.hs
 client_session_key.aes
 
 # vim temp files
@@ -9,9 +9,9 @@ client_session_key.aes
 *.swo
 
 # vagrant
-/.vagrant
+.vagrant
 
-# chef, librarian
-/Cheffile.lock
-/cookbooks
-/tmp
+# chef
+Cheffile.lock
+cookbooks
+tmp

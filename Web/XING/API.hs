@@ -21,8 +21,6 @@ import           Web.XING.Types
 import           Web.XING.API.Error
 import           Web.XING.Auth
 import qualified Control.Exception.Lifted as E
-import Control.Exception (throw)
-import Network.HTTP.Conduit (HttpException(StatusCodeException))
 
 apiBaseUrl :: BS.ByteString
 apiBaseUrl = "https://api.xing.com"
@@ -39,4 +37,4 @@ apiRequest oa manager cr m uri  = do
   let req = fromJust $ parseUrl $ BS.unpack (apiBaseUrl `mappend` uri)
   req' <- signOAuth oa cr req{method = m}
   E.catch (httpLbs req' manager)
-    (\(StatusCodeException status headers) -> throw $ handleError status headers (m `mappend` " " `mappend` uri))
+    (handleStatusCodeException (m `mappend` " " `mappend` uri))
