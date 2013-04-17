@@ -4,7 +4,8 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE TypeFamilies #-}
 
-import           Yesod
+-- TODO languages is defined by Yesod and Web.XING.Calls.User. Find a better name for the XING part
+import           Yesod hiding (languages)
 import           Web.XING
 import           Network.HTTP.Conduit (newManager, def)
 import           Data.Maybe (fromJust, isJust, fromMaybe)
@@ -15,8 +16,9 @@ import           YesodHelper ( bootstrapLayout, bootstrapCDN
 import qualified Data.ByteString.Char8 as BS
 import           Data.Monoid (mappend)
 import qualified Data.Text.Encoding as E
-import Data.Time
+import           Data.Time
 import qualified Config
+import qualified Data.Text as T
 
 data HelloXING = HelloXING {
     httpManager :: Manager
@@ -132,7 +134,40 @@ whoAmI user birthDayInDays = do
     <p>
       <a href=#{permalink user}>#{displayName user}
     <p>
+      Hey #{firstName user}! Welcome to this demo.<br>
       Your birthday is in #{show birthDayInDays} days.
+
+    $if (M.member "de" $ languages user)
+      $if (gender user) == Male
+        Herr #{lastName user}
+      $else
+        Frau #{lastName user}
+      \ spricht folgende Fremdsprachen: #{T.intercalate ", " $ M.keys (M.delete "de" $ languages user)}.
+    $else
+      <p>
+        Did you know? In Germany you would be greeted with 
+        $if (gender user) == Male
+          "Guten Tag Herr #{lastName user}"
+        $else
+          "Guten Tag Frau #{lastName user}"
+        .
+
+    $maybe email <- activeEmail user
+      <p>Your active email address is <a href=mailto:#{email}>#{email}</a>.
+
+    <p>Here is a list of your premium services
+    <ul>
+      $forall service <- premiumServices user
+        <li>#{service}
+
+    $if null $ badges user
+      You have no badges.
+    $else
+      <p>Your badges:
+      <ul>
+        $forall badge <- badges user
+          <li>#{badge}
+
     <form method=POST action=@{LogoutR}>
       <input type=submit value="Logout">
   |]

@@ -9,8 +9,10 @@ module Web.XING.Types
     , AccessToken
     , URL
     , User(..)
+    , Gender(..)
     , UserId
     , PhotoUrls
+    , Language, Skill
       -- * reexports
     , Manager
     , OAuth(..)
@@ -27,6 +29,8 @@ import Control.Exception (Exception)
 import Data.Typeable (Typeable)
 import Data.Text (Text)
 import Data.Map (Map)
+import Data.Aeson (FromJSON(..), Value(..))
+import Control.Monad (mzero)
 
 data APIError
   = OAuthError String
@@ -44,6 +48,18 @@ type Verifier     = BS.ByteString
 type URL          = BS.ByteString
 type UserId       = Text
 type PhotoUrls    = Map Text Text
+type Language = Text
+type Skill = Text
+
+data Gender
+  = Male
+  | Female
+  deriving (Eq, Show)
+
+instance FromJSON Gender where
+  parseJSON (String "m") = return Male
+  parseJSON (String "f") = return Female
+  parseJSON _            = mzero
 
 class User a where
   userId      :: a -> UserId
