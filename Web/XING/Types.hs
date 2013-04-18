@@ -14,6 +14,7 @@ module Web.XING.Types
     , Credential(..)
     , BS.ByteString
     , Status
+    , module Web.XING.Types.Address
     , module Web.XING.Types.BirthDate
     , module Web.XING.Types.User
     , module Web.XING.Types.User.FullUser
@@ -29,6 +30,7 @@ import Data.Typeable (Typeable)
 
 import Web.XING.Types.BirthDate
 import Web.XING.Types.User
+import Web.XING.Types.Address
 import Web.XING.Types.User.MinimalUser
 import Web.XING.Types.User.FullUser
 

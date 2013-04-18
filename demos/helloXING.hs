@@ -152,8 +152,8 @@ whoAmI user birthDayInDays = do
           "Guten Tag Frau #{lastName user}"
         .
 
-    $maybe email <- activeEmail user
-      <p>Your active email address is <a href=mailto:#{email}>#{email}</a>.
+    $maybe mail <- activeEmail user
+      <p>Your active email address is <a href=mailto:#{mail}>#{mail}</a>.
 
     <p>Here is a list of your premium services
     <ul>

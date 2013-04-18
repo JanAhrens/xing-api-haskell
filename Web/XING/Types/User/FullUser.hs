@@ -12,10 +12,13 @@ module Web.XING.Types.User.FullUser
     , birthDate, gender, firstName, lastName
     , activeEmail, premiumServices, badges, languages
     , wants, haves, interests, organisations, pageName
+    , privateAddress, businessAddress
     ) where
 
 import Web.XING.Types.User
 import Web.XING.Types.BirthDate
+import Web.XING.Types.Address
+
 import Data.Aeson (Value(..), FromJSON(..), (.:), (.:?))
 import Data.Aeson.Types (parseMaybe)
 import Control.Monad (mzero)
@@ -66,6 +69,8 @@ data FullUser
     , _haves           :: Maybe Text
     , _interests       :: Maybe Text
     , _organisations   :: Maybe Text
+    , _privateAddress  :: Address
+    , _businessAddress :: Address
     , _photoUrls       :: PhotoUrls
     , _birthDate       :: Maybe BirthDate
   }
@@ -98,6 +103,8 @@ instance FromJSON FullUser where
              <*> (response .: "haves")
              <*> (response .: "interests")
              <*> (response .: "organisation_member")
+             <*> (response .: "private_address")
+             <*> (response .: "business_address")
              <*> (response .: "photo_urls")
              <*> (return . (parseMaybe parseJSON) =<< response .: "birth_date")
   parseJSON _ = mzero
@@ -112,57 +119,43 @@ gender
   -> Gender
 gender = _gender
 
-firstName
+firstName, lastName
   :: FullUser
   -> Text
 firstName = _firstName
-
-lastName
-  :: FullUser
-  -> Text
-lastName = _lastName
+lastName  = _lastName
 
 activeEmail
   :: FullUser
   -> Maybe Text
 activeEmail = _activeEmail
 
-premiumServices
+premiumServices, badges
   :: FullUser
   -> [Text]
 premiumServices = _premiumServices
-
-badges
-  :: FullUser
-  -> [Text]
-badges = _badges
+badges          = _badges
 
 languages
   :: FullUser
   -> Map Language (Maybe Skill)
 languages = _languages
 
-wants
+wants, haves, interests, organisations
   :: FullUser
   -> Maybe Text
-wants = _wants
-
-haves
-  :: FullUser
-  -> Maybe Text
-haves = _haves
-
-interests
-  :: FullUser
-  -> Maybe Text
-interests = _interests
-
-organisations
-  :: FullUser
-  -> Maybe Text
+wants         = _wants
+haves         = _haves
+interests     = _interests
 organisations = _organisations
 
 pageName
   :: FullUser
   -> Text
 pageName = _pageName
+
+privateAddress, businessAddress
+  :: FullUser
+  -> Address
+privateAddress  = _privateAddress
+businessAddress = _businessAddress
