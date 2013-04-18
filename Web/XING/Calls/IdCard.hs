@@ -16,33 +16,7 @@ import Network.HTTP.Conduit (Response(..))
 import Control.Monad.Trans.Control (MonadBaseControl)
 import Control.Monad.Trans.Resource (MonadResource)
 import Control.Exception (throw)
-import Data.Aeson ( encode, decode, Value(..)
-                  , object, (.=), FromJSON(..), (.:) )
-import Data.Text (Text)
-import Control.Applicative ((<*>), (<$>))
-
-data MinimalUser
-  = MinimalUser
-      UserId
-      Text -- ^ display_name
-      Text -- ^ permalink
-      PhotoUrls
-  deriving (Show, Eq)
-
-instance User MinimalUser where
-  userId (MinimalUser uid _ _ _ )      = uid
-  displayName (MinimalUser _ name _ _) = name
-  permalink (MinimalUser _ _ link _)   = link
-  photoUrls (MinimalUser _ _ _ urls)   = urls
-
-instance FromJSON MinimalUser where
-  parseJSON (Object response) = do
-    container <- response .: "id_card"
-    MinimalUser <$> (container .: "id")
-           <*> (container .: "display_name")
-           <*> (container .: "permalink")
-           <*> (container .: "photo_urls")
-  parseJSON _ = fail "no parse"
+import Data.Aeson (encode, decode, Value(..), object, (.=))
 
 getIdCard
   :: (MonadResource m, MonadBaseControl IO m)

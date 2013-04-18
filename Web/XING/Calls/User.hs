@@ -1,149 +1,25 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE FlexibleContexts  #-}
-{-# LANGUAGE FlexibleInstances  #-}
+{-# LANGUAGE FlexibleInstances #-}
 
 module Web.XING.Calls.User
     (
-        demoUser
-      , demoUser'
-      , demoUsers
-      , demoUsers'
-      , getUsers
-      , FullUser
-      , UserList(..)
-      , BirthDate(..)
-      -- 
-      , birthDate, gender, firstName, lastName
-      , activeEmail, premiumServices, badges, languages
+      demoUser,  demoUser'
+    , demoUsers, demoUsers'
+    , getUsers
     ) where
 
 import Web.XING.Types
 import Web.XING.API
-import Data.Aeson ( encode, decode, Value(..)
-                  , object, (.=), FromJSON(..), (.:), (.:?) )
-import Data.Aeson.Types (parseMaybe)
+import Data.Aeson (encode, decode, Value(..), object, (.=))
 import qualified Data.ByteString.Lazy.Char8 as BSL
-import Control.Applicative ((<$>), (<*>))
 import Network.HTTP.Conduit (Response(..))
 import Control.Monad.Trans.Control (MonadBaseControl)
 import Control.Monad.Trans.Resource (MonadResource)
-import Control.Monad (mzero)
 import Data.Monoid (mappend)
 import Control.Exception (throw)
 import Data.Text.Encoding (encodeUtf8)
-import Data.Text (Text, intercalate)
-import Data.Time.LocalTime (TimeZone(..))
-import Data.Map (Map)
-
-data BirthDate
-  = FullDate Integer Int Int
-  | DayOnly Int Int
-  deriving (Eq, Show)
-
-data FullUser
-  = FullUser {
-      _userId      :: UserId
-    , _displayName :: Text
-    , _permalink   :: Text
-    , _photoUrls   :: PhotoUrls
-    , _gender      :: Gender
-    , _firstName   :: Text
-    , _lastName    :: Text
-    , _activeEmail :: Maybe Text
-    , _timeZone    :: TimeZone
-    , _premiumServices :: [Text]
-    , _badges      :: [Text]
-    , _languages   :: Map Language (Maybe Skill)
-    , _birthDate   :: Maybe BirthDate
-  }
-  deriving (Show, Eq)
-
-newtype UserList = UserList { unUserList :: [FullUser] }
-  deriving (Show)
-
-instance User FullUser where
-  userId      = _userId
-  displayName = _displayName
-  permalink   = _permalink
-  photoUrls   = _photoUrls
-
-birthDate
-  :: FullUser
-  -> Maybe BirthDate
-birthDate = _birthDate
-
-gender
-  :: FullUser
-  -> Gender
-gender = _gender
-
-firstName
-  :: FullUser
-  -> Text
-firstName = _firstName
-
-lastName
-  :: FullUser
-  -> Text
-lastName = _lastName
-
-activeEmail
-  :: FullUser
-  -> Maybe Text
-activeEmail = _activeEmail
-
-premiumServices
-  :: FullUser
-  -> [Text]
-premiumServices = _premiumServices
-
-badges
-  :: FullUser
-  -> [Text]
-badges = _badges
-
-languages
-  :: FullUser
-  -> Map Language (Maybe Skill)
-languages = _languages
-
-instance FromJSON BirthDate where
-  parseJSON (Object response) = do
-    maybeYear <- response .:? "year"
-    month     <- response .:  "month"
-    day       <- response .:  "day"
-    case maybeYear of
-      Just year -> return $ FullDate year month day
-      _         -> return $ DayOnly day month
-  parseJSON _ = mzero
-
-instance FromJSON FullUser where
-  parseJSON (Object response) = do
-    FullUser <$> (response .: "id")
-             <*> (response .: "display_name")
-             <*> (response .: "permalink")
-             <*> (response .: "photo_urls")
-             <*> (parseJSON =<< response .: "gender")
-             <*> (response .: "first_name")
-             <*> (response .: "last_name")
-             <*> (response .:? "active_email")
-             <*> (response .: "time_zone" >>= \zone -> do
-                    TimeZone <$> (return . (60 *) =<< zone .: "utc_offset")
-                             <*> return False
-                             <*> (zone .: "name"))
-             <*> (response .: "premium_services")
-             <*> (response .: "badges")
-             <*> (response .: "languages")
-             <*> (return . (parseMaybe parseJSON) =<< response .: "birth_date")
-  parseJSON _ = mzero
-
--- TODO: it would be nice, if instead of using the UserList hack, we could use:
---   instance FromJSON [FullUser] where
-instance FromJSON UserList where
-  parseJSON (Object response) = do
-    users <- parseJSON =<< (response .: "users")
-    return $ UserList users
-  parseJSON _ = mzero
+import Data.Text (intercalate)
 
 getUsers
   :: (MonadResource m, MonadBaseControl IO m)
