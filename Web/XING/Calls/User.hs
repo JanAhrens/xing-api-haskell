@@ -46,17 +46,12 @@ demoUsers' = encode demoUsers
 demoUser :: Value
 demoUser = object [
         "id"           .= ("12345_abcdef" :: BSL.ByteString)
+      , "display_name" .= ("Max Mustermann" :: BSL.ByteString)
+      , "permalink"    .= ("https://www.xing.com/profile/Max_Mustermann" :: BSL.ByteString)
       , "first_name"   .= ("Max" :: BSL.ByteString)
       , "last_name"    .= ("Mustermann" :: BSL.ByteString)
-      , "display_name" .= ("Max Mustermann" :: BSL.ByteString)
       , "page_name"    .= ("Max_Mustermann" :: BSL.ByteString)
-      , "permalink"    .= ("https://www.xing.com/profile/Max_Mustermann" :: BSL.ByteString)
       , "gender"       .= ("m" :: BSL.ByteString)
-      , "birth_date"   .= object [
-          "day"   .= (12 :: Int)
-        , "month" .= (8 :: Int)
-        , "year"  .= (1963 :: Int)
-      ]
       , "active_email" .= ("max.mustermann@xing.com" :: BSL.ByteString)
       , "time_zone" .= object [
           "name"       .= ("Europe/Copenhagen" :: BSL.ByteString)
@@ -64,16 +59,16 @@ demoUser = object [
       ]
       , "premium_services" .= (["SEARCH", "PRIVATEMESSAGES"] :: [BSL.ByteString])
       , "badges"    .= (["PREMIUM", "PRIVATEMESSAGES"] :: [BSL.ByteString])
-      , "wants"     .= (encodeUtf8 "einen neuen Job")
-      , "haves"     .= (encodeUtf8 "viele tolle Skills")
-      , "interests" .= (encodeUtf8 "Flitzebogen schießen and so on")
-      , "organisation_member" .= (encodeUtf8 "ACM, GI")
       , "languages" .= object [
           "de" .= ("NATIVE" :: BSL.ByteString)
         , "en" .= ("FLUENT" :: BSL.ByteString)
         , "fr" .= Null
         , "zh" .= ("BASIC" :: BSL.ByteString)
       ]
+      , "wants"     .= (encodeUtf8 "einen neuen Job")
+      , "haves"     .= (encodeUtf8 "viele tolle Skills")
+      , "interests" .= (encodeUtf8 "Flitzebogen schießen and so on")
+      , "organisation_member" .= (encodeUtf8 "ACM, GI")
       , "private_address" .= object [
           "city"         .= (encodeUtf8 "Hamburg")
         , "country"      .= (encodeUtf8 "DE")
@@ -184,6 +179,11 @@ demoUser = object [
         , "thumb"        .= ("http://www.xing.com/img/users/e/3/d/f94ef165a.123456,1.30x40.jpg"   :: BSL.ByteString)
         , "medium_thumb" .= ("http://www.xing.com/img/users/e/3/d/f94ef165a.123456,1.57x75.jpg"   :: BSL.ByteString)
         , "maxi_thumb"   .= ("http://www.xing.com/img/users/e/3/d/f94ef165a.123456,1.70x93.jpg"   :: BSL.ByteString)
+      ]
+      , "birth_date"   .= object [
+          "day"   .= (12 :: Int)
+        , "month" .= (8 :: Int)
+        , "year"  .= (1963 :: Int)
       ]
     ]
 

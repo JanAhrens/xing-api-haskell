@@ -11,6 +11,7 @@ module Web.XING.Types.User.FullUser
     --
     , birthDate, gender, firstName, lastName
     , activeEmail, premiumServices, badges, languages
+    , wants, haves, interests, organisations, pageName
     ) where
 
 import Web.XING.Types.User
@@ -49,19 +50,24 @@ instance FromJSON UserList where
 
 data FullUser
   = FullUser {
-      _userId      :: UserId
-    , _displayName :: Text
-    , _permalink   :: Text
-    , _photoUrls   :: PhotoUrls
-    , _gender      :: Gender
-    , _firstName   :: Text
-    , _lastName    :: Text
-    , _activeEmail :: Maybe Text
-    , _timeZone    :: TimeZone
+      _userId          :: UserId
+    , _displayName     :: Text
+    , _permalink       :: Text
+    , _firstName       :: Text
+    , _lastName        :: Text
+    , _pageName        :: Text
+    , _gender          :: Gender
+    , _activeEmail     :: Maybe Text
+    , _timeZone        :: TimeZone
     , _premiumServices :: [Text]
-    , _badges      :: [Text]
-    , _languages   :: Map Language (Maybe Skill)
-    , _birthDate   :: Maybe BirthDate
+    , _badges          :: [Text]
+    , _languages       :: Map Language (Maybe Skill)
+    , _wants           :: Maybe Text
+    , _haves           :: Maybe Text
+    , _interests       :: Maybe Text
+    , _organisations   :: Maybe Text
+    , _photoUrls       :: PhotoUrls
+    , _birthDate       :: Maybe BirthDate
   }
   deriving (Show, Eq)
 
@@ -76,10 +82,10 @@ instance FromJSON FullUser where
     FullUser <$> (response .: "id")
              <*> (response .: "display_name")
              <*> (response .: "permalink")
-             <*> (response .: "photo_urls")
-             <*> (parseJSON =<< response .: "gender")
              <*> (response .: "first_name")
              <*> (response .: "last_name")
+             <*> (response .: "page_name")
+             <*> (parseJSON =<< response .: "gender")
              <*> (response .:? "active_email")
              <*> (response .: "time_zone" >>= \zone -> do
                     TimeZone <$> (return . (60 *) =<< zone .: "utc_offset")
@@ -88,6 +94,11 @@ instance FromJSON FullUser where
              <*> (response .: "premium_services")
              <*> (response .: "badges")
              <*> (response .: "languages")
+             <*> (response .: "wants")
+             <*> (response .: "haves")
+             <*> (response .: "interests")
+             <*> (response .: "organisation_member")
+             <*> (response .: "photo_urls")
              <*> (return . (parseMaybe parseJSON) =<< response .: "birth_date")
   parseJSON _ = mzero
 
@@ -130,3 +141,28 @@ languages
   :: FullUser
   -> Map Language (Maybe Skill)
 languages = _languages
+
+wants
+  :: FullUser
+  -> Maybe Text
+wants = _wants
+
+haves
+  :: FullUser
+  -> Maybe Text
+haves = _haves
+
+interests
+  :: FullUser
+  -> Maybe Text
+interests = _interests
+
+organisations
+  :: FullUser
+  -> Maybe Text
+organisations = _organisations
+
+pageName
+  :: FullUser
+  -> Text
+pageName = _pageName
