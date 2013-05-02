@@ -41,6 +41,15 @@ test_emptyHash :: IO ()
 test_emptyHash
   = assertInvalidBirthDate "{}"
 
+test_nullValuesAreNotAValidBirthDate :: IO ()
+test_nullValuesAreNotAValidBirthDate
+  = assertInvalidBirthDate
+      "  {                  \
+      \    \"day\":   null, \
+      \    \"month\": null, \
+      \    \"year\":  null  \
+      \  }                  "
+
 test_incompleteHash :: IO ()
 test_incompleteHash
   = assertInvalidBirthDate

@@ -28,6 +28,21 @@ test_noContent
       \     \"mobile_phone\": \"\"   \
       \  }                           "
 
+test_nullValuesAreValid :: IO ()
+test_nullValuesAreValid
+  = assertValidAddress
+      "  {                           \
+      \     \"street\":       null,  \
+      \     \"zip_code\":     null,  \
+      \     \"city\":         null,  \
+      \     \"province\":     null,  \
+      \     \"country\":      null,  \
+      \     \"email\":        null,  \
+      \     \"phone\":        null,  \
+      \     \"fax\":          null,  \
+      \     \"mobile_phone\": null   \
+      \  }                           "
+
 test_fullAddress :: IO ()
 test_fullAddress
   = assertValidAddress . encodeUtf8 $
