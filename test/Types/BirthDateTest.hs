@@ -5,7 +5,6 @@ module Types.BirthDateTest where
 
 import Test.Framework
 import Test.HUnit.Base
-
 import Web.XING.Types.BirthDate
 import Data.Maybe
 import Data.Aeson

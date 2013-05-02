@@ -2,7 +2,7 @@
 
 module Web.XING.Types.User.MinimalUser
     (
-      MinimalUser
+      MinimalUser(..)
     ) where
 
 import Web.XING.Types.User

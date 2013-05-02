@@ -4,7 +4,6 @@
 module Types.AddressTest where
 
 import Test.Framework
-
 import Web.XING.Types.Address
 import Data.Maybe
 import Data.Aeson
