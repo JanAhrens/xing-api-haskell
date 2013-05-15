@@ -13,6 +13,7 @@ test_noContentValid :: IO ()
 test_noContentValid
   = (assertBool . isJust . parseFullUser) fullUserWithoutContent
 
+-- https://dev.xing.com/docs/user_profile
 fullUserWithoutContent :: BSL.ByteString
 fullUserWithoutContent =
   "  {                                \
@@ -57,6 +58,23 @@ fullUserWithoutContent =
   \      \"fax\":          \"\",      \
   \      \"mobile_phone\": \"\"       \
   \    },                             \
+  \    \"professional_experience\": {     \
+  \      \"primary_company\": {           \
+  \        \"title\":        null,        \
+  \        \"begin_date\":   null,        \
+  \        \"end_date\":     null,        \
+  \        \"career_level\": null,        \
+  \        \"description\":  null,        \
+  \                                       \
+  \        \"name\":         null,        \
+  \        \"tag\":          null,        \
+  \        \"company_size\": null,        \
+  \        \"url\":          null,        \
+  \        \"industry\":     \"OTHERS\"   \
+  \      },                               \
+  \      \"non_primary_companies\": [],   \
+  \      \"awards\": []                   \
+  \    },                                 \
   \    \"photo_urls\": {},            \
   \    \"birth_date\": {}             \
   \  }                                "

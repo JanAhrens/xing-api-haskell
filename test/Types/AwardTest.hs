@@ -45,7 +45,7 @@ parseAward = decode
 assertValidAward
   :: BSL.ByteString
   -> IO ()
-assertValidAward   = assertBool . isJust . parseAward
+assertValidAward = assertBool . isJust . parseAward
 
 main :: IO ()
 main = htfMain htf_thisModulesTests
