@@ -33,7 +33,7 @@ main = withManager $ \manager -> do
       getAccessToken requestToken verifier oauthConfig manager
 ```
 
-[minimal.hs](demos/minimal.hs)
+[Download](demos/minimal.hs?raw=true) this minimal working example.
 
 ## Development environment
 
