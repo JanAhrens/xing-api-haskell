@@ -8,7 +8,6 @@
 import           Yesod.Core hiding (languages)
 import           Network.Wai.Handler.Warp (run)
 import           Text.Hamlet (hamlet)
-import           Control.Monad.IO.Class (MonadIO (liftIO))
 import           Web.XING
 import           Network.HTTP.Conduit (newManager, def)
 import           Data.Maybe (fromJust, isJust, fromMaybe)

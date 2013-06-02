@@ -13,8 +13,6 @@ This library is a private project and isn't associated with XING AG.
 {-# LANGUAGE OverloadedStrings #-}
 
 import Web.XING
-import Control.Monad.IO.Class (MonadIO (liftIO))
-import Network.HTTP.Conduit (withManager)
 import qualified Data.ByteString.Char8 as BS
 
 oauthConfig :: OAuth
@@ -34,6 +32,8 @@ main = withManager $ \manager -> do
         BS.getLine
       getAccessToken requestToken verifier oauthConfig manager
 ```
+
+[minimal.hs](demos/minimal.hs)
 
 ## Development environment
 

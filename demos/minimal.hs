@@ -1,8 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 import Web.XING
-import Control.Monad.IO.Class (MonadIO (liftIO))
-import Network.HTTP.Conduit (withManager)
 import qualified Data.ByteString.Char8 as BS
 
 oauthConfig :: OAuth
