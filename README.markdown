@@ -4,7 +4,7 @@
 
 This Haskell library is a wrapper for the [XING API](https://dev.xing.com/).
 
-It's currently under development and is *not* considered *stable*.
+It's currently under development and is **not** considered **stable**.
 This library is a private project and isn't associated with XING AG.
 
 ## Usage
