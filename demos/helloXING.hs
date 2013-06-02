@@ -5,7 +5,10 @@
 {-# LANGUAGE TypeFamilies #-}
 
 -- TODO languages is defined by Yesod and Web.XING.Calls.User. Find a better name for the XING part
-import           Yesod hiding (languages)
+import           Yesod.Core hiding (languages)
+import           Network.Wai.Handler.Warp (run)
+import           Text.Hamlet (hamlet)
+import           Control.Monad.IO.Class (MonadIO (liftIO))
 import           Web.XING
 import           Network.HTTP.Conduit (newManager, def)
 import           Data.Maybe (fromJust, isJust, fromMaybe)
@@ -179,4 +182,5 @@ main = do
   let testConsumer = Config.testConsumer{
     oauthCallback = Just $ "http://localhost:" `mappend` (BS.pack.show) port `mappend` "/callback"
   }
-  warpDebug port (HelloXING manager testConsumer)
+  putStrLn $ "Starting on port " ++ show port
+  run port =<< toWaiApp (HelloXING manager testConsumer)

@@ -4,7 +4,10 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE TypeFamilies #-}
 
-import           Yesod
+import           Yesod.Core
+import           Text.Julius
+import           Yesod.Form
+import           Network.Wai.Handler.Warp (run)
 import           Yesod.Auth
 import           Yesod.Auth.XING
 import qualified Yesod.Auth.Message as Msg
@@ -72,4 +75,6 @@ getRootR = do
 main :: IO ()
 main = do
   manager <- newManager def
-  warpDebug 3000 $ XINGAuth manager
+  let port = 3000
+  putStrLn $ "Starting on port " ++ show port
+  run port =<< toWaiApp (XINGAuth manager)

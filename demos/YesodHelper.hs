@@ -9,8 +9,13 @@ module YesodHelper(
   , deleteTokenFromSession
 ) where
 
-import Yesod
+import Yesod.Core (Yesod, widgetToPageContent)
+import Yesod.Widget (GWidget, PageContent(..))
+import Yesod.Handler (GHandler, hamletToRepHtml, getMessage, setMessage, getMessageRender, setSessionBS, deleteSession, lookupSessionBS)
+import Yesod.Content (RepHtml)
+import Text.Hamlet (hamlet)
 import Data.Text (Text)
+import Text.Shakespeare.I18N (RenderMessage(..))
 import Web.XING
 import Text.Hamlet (shamlet)
 import Data.Maybe (isJust, fromJust)
