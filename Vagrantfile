@@ -1,23 +1,24 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-Vagrant::Config.run do |config|
+Vagrant.configure("2") do |config|
   config.vm.box       = 'precise64'
   config.vm.box_url   = 'http://files.vagrantup.com/precise64.box'
 
-  config.vm.boot_mode = :headless
-  config.vm.customize ['modifyvm', :id, '--memory', 1024]
+  config.vm.provider "virtualbox" do |v|
+    v.gui = false
+    v.customize ['modifyvm', :id, '--memory', 1024]
+  end
 
-  config.vm.forward_port 3000, 3000 # Yesod
+  config.vm.network :forwarded_port, guest: 3000, host: 3000 # Yesod
 
   config.vm.provision :chef_solo do |chef|
-     chef.cookbooks_path = ['cookbooks']
-
-     chef.add_recipe 'apt'
-     chef.add_recipe 'build-essential'
-     chef.add_recipe 'vim'
-     chef.add_recipe 'git'
-     chef.add_recipe 'haskell'
+    # reminder: add cookbook dependencies to the Berksfile
+    chef.add_recipe 'apt'
+    chef.add_recipe 'build-essential'
+    chef.add_recipe 'vim'
+    chef.add_recipe 'git'
+    chef.add_recipe 'haskell'
 
      chef.json = {
        # configuration of the haskell cookbook

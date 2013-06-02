@@ -10,8 +10,3 @@ client_session_key.aes
 
 # vagrant
 .vagrant
-
-# chef
-Cheffile.lock
-cookbooks
-tmp
