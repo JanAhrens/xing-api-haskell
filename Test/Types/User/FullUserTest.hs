@@ -1,7 +1,7 @@
 {-# OPTIONS_GHC -F -pgmF htfpp #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Types.User.FullUserTest where
+module Test.Types.User.FullUserTest where
 
 import Test.Framework
 import Web.XING.Types.User.FullUser

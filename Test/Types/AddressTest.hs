@@ -1,7 +1,7 @@
 {-# OPTIONS_GHC -F -pgmF htfpp #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Types.AddressTest where
+module Test.Types.AddressTest where
 
 import Test.Framework
 import Web.XING.Types.Address
@@ -86,6 +86,3 @@ assertValidAddress, assertInvalidAddress
   -> IO ()
 assertValidAddress   = assertBool . isJust    . parseAddress
 assertInvalidAddress = assertBool . isNothing . parseAddress
-
-main :: IO ()
-main = htfMain htf_thisModulesTests

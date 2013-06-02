@@ -1,10 +1,9 @@
 {-# OPTIONS_GHC -F -pgmF htfpp #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Types.ProfessionalExperience where
+module Test.Types.ProfessionalExperienceTest where
 
 import Test.Framework
-import Test.HUnit.Base
 import Web.XING.Types.ProfessionalExperience
 import Data.Maybe
 import Data.Aeson
@@ -49,7 +48,7 @@ test_fullProfessionalExperienceValid
 
 test_contentMappedCorrect :: IO ()
 test_contentMappedCorrect
-  = (ProfessionalExperience
+  = assertEqual (ProfessionalExperience
       (Just "Softwareentwickler")
       (Just "2010-01")
       (Just "2012-12")
@@ -59,7 +58,7 @@ test_contentMappedCorrect
       (Just "XINGAG")
       (Just "201-500")
       (Just "https://www.xing.com")
-      "OTHERS") @=? (fromJust $ parseProfessionalExperience fullProfessionalExperience)
+      "OTHERS") (fromJust $ parseProfessionalExperience fullProfessionalExperience)
 
 -- invalid fields
 

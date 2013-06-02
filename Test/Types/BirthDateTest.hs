@@ -1,10 +1,9 @@
 {-# OPTIONS_GHC -F -pgmF htfpp #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Types.BirthDateTest where
+module Test.Types.BirthDateTest where
 
 import Test.Framework
-import Test.HUnit.Base
 import Web.XING.Types.BirthDate
 import Data.Maybe
 import Data.Aeson
@@ -14,7 +13,7 @@ import qualified Data.ByteString.Lazy as BSL
 
 test_fullBirthDateCorrectMapped :: IO ()
 test_fullBirthDateCorrectMapped
-  = (FullDate 1963 8 12) @=? (fromJust $ parseBirthDate fullBirthDate)
+  = assertEqual (FullDate 1963 8 12) (fromJust $ parseBirthDate fullBirthDate)
   where
     fullBirthDate =
       "  {                  \
@@ -25,7 +24,7 @@ test_fullBirthDateCorrectMapped
 
 test_dayOnlyCorrectMapped :: IO ()
 test_dayOnlyCorrectMapped
-  = (DayOnly 12 8) @=? (fromJust $ parseBirthDate dayOnly)
+  = assertEqual (DayOnly 12 8) (fromJust $ parseBirthDate dayOnly)
   where
     dayOnly =
       "  {                  \

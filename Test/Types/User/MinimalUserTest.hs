@@ -1,10 +1,9 @@
 {-# OPTIONS_GHC -F -pgmF htfpp #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Types.User.MinimalUserTest where
+module Test.Types.User.MinimalUserTest where
 
 import Test.Framework
-import Test.HUnit.Base
 import Web.XING.Types.User.MinimalUser
 import Data.Maybe
 import Data.Map
@@ -17,7 +16,7 @@ test_noContentValid
 
 test_minimalUserCorrectMapped :: IO ()
 test_minimalUserCorrectMapped
-  = (MinimalUser "" "" "" empty) @=? (fromJust $ parseMinimalUser minimalUserWithoutContent)
+  = assertEqual (MinimalUser "" "" "" empty) (fromJust $ parseMinimalUser minimalUserWithoutContent)
 
 minimalUserWithoutContent :: BSL.ByteString
 minimalUserWithoutContent =
