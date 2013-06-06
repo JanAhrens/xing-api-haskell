@@ -9,6 +9,9 @@ This library is a private project and isn't associated with XING AG.
 
 ## Usage
 
+To use this [minimal working example](demos/minimal.hs?raw=true) you'll need to get
+a consumer key and secret from the [XING developer](https://dev.xing.com) site.
+
 ```haskell
 {-# LANGUAGE OverloadedStrings #-}
 
@@ -32,8 +35,6 @@ main = withManager $ \manager -> do
         BS.getLine
       getAccessToken requestToken verifier oauthConfig manager
 ```
-
-[Download](demos/minimal.hs?raw=true) this minimal working example.
 
 ## Development environment
 
