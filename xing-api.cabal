@@ -89,11 +89,9 @@ executable cli-demo
     buildable:       True
     build-depends:     base                    == 4.*
                      , bytestring              == 0.9.*
-                     , http-conduit            == 1.8.*
                      , monad-control           == 0.3.*
                      , resourcet               == 0.4.*
                      , text                    == 0.11.*
-                     , transformers            == 0.2.*
                      , xing-api
   else
     buildable:       False
