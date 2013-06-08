@@ -1,10 +1,10 @@
 {-# OPTIONS_GHC -F -pgmF htfpp #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Test.Types.AwardTest where
+module Types.AwardTest where
 
 import Test.Framework
-import Web.XING.Types.Award
+import Web.XING
 import Data.Maybe
 import Data.Aeson
 import qualified Data.ByteString.Lazy as BSL

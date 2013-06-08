@@ -1,6 +1,7 @@
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE OverloadedStrings #-}
-module YesodHelper(
+
+module Helper.YesodHelper(
     bootstrapCDN
   , bootstrapLayout
   , alertMessage

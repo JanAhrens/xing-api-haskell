@@ -1,10 +1,10 @@
 {-# OPTIONS_GHC -F -pgmF htfpp #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Test.Types.User.MinimalUserTest where
+module Types.User.MinimalUserTest where
 
 import Test.Framework
-import Web.XING.Types.User.MinimalUser
+import Web.XING
 import Data.Maybe
 import Data.Map
 import Data.Aeson

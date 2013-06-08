@@ -1,10 +1,10 @@
 {-# OPTIONS_GHC -F -pgmF htfpp #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Test.Types.AddressTest where
+module Types.AddressTest where
 
 import Test.Framework
-import Web.XING.Types.Address
+import Web.XING
 import Data.Maybe
 import Data.Aeson
 import qualified Data.ByteString.Lazy as BSL

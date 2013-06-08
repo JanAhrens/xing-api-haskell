@@ -4,6 +4,8 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE TypeFamilies #-}
 
+module Main where
+
 -- TODO languages is defined by Yesod and Web.XING.Calls.User. Find a better name for the XING part
 import           Yesod.Core hiding (languages)
 import           Network.Wai.Handler.Warp (run)
@@ -12,9 +14,9 @@ import           Web.XING
 import           Network.HTTP.Conduit (newManager, def)
 import           Data.Maybe (fromJust, isJust, fromMaybe)
 import qualified Data.Map as M
-import           YesodHelper ( bootstrapLayout, bootstrapCDN
-                             , writeTokenToSession, getTokenFromSession
-                             , deleteTokenFromSession )
+import           Helper.YesodHelper ( bootstrapLayout, bootstrapCDN
+                                    , writeTokenToSession, getTokenFromSession
+                                    , deleteTokenFromSession )
 import qualified Data.ByteString.Char8 as BS
 import           Data.Monoid (mappend)
 import qualified Data.Text.Encoding as E

@@ -13,16 +13,16 @@ import Data.Text (Text)
 
 data ProfessionalExperience
   = ProfessionalExperience {
-      title       :: Maybe Text
-    , beginDate   :: Maybe Text
-    , endDate     :: Maybe Text
-    , careerLevel :: Maybe Text
-    , description :: Maybe Text
-    , name        :: Maybe Text
-    , tag         :: Maybe Text
-    , companySize :: Maybe Text
-    , url         :: Maybe Text
-    , industry    :: Text
+      pe_title       :: Maybe Text
+    , pe_beginDate   :: Maybe Text
+    , pe_endDate     :: Maybe Text
+    , pe_careerLevel :: Maybe Text
+    , pe_description :: Maybe Text
+    , pe_name        :: Maybe Text
+    , pe_tag         :: Maybe Text
+    , pe_companySize :: Maybe Text
+    , pe_url         :: Maybe Text
+    , pe_industry    :: Text
   }
   deriving (Show, Eq)
 

@@ -1,6 +1,4 @@
 dist
-*.hi
-*.o
 demos/Config.hs
 client_session_key.aes
 

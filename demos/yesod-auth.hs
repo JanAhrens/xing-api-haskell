@@ -4,6 +4,8 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE TypeFamilies #-}
 
+module Main where
+
 import           Yesod.Core
 import           Text.Julius
 import           Yesod.Form
@@ -15,7 +17,7 @@ import           Network.HTTP.Conduit (newManager, def)
 import           Data.Text (Text)
 import           Data.Monoid (mappend)
 import qualified Config
-import           YesodHelper (bootstrapCDN, bootstrapLayout, alertMessage)
+import           Helper.YesodHelper (bootstrapCDN, bootstrapLayout, alertMessage)
 
 data XINGAuth = XINGAuth {
   httpManager :: Manager

@@ -1,14 +1,13 @@
 {-# OPTIONS_GHC -F -pgmF htfpp #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Test.Types.ProfessionalExperienceTest where
+module Types.ProfessionalExperienceTest where
 
 import Test.Framework
-import Web.XING.Types.ProfessionalExperience
+import Web.XING
 import Data.Maybe
 import Data.Aeson
 import qualified Data.ByteString.Lazy as BSL
-import Data.Text.Lazy.Encoding (encodeUtf8)
 
 -- valid fields
 
@@ -28,6 +27,7 @@ test_noContentValid
       \    \"industry\":     \"OTHERS\" \
       \  }                              "
 
+fullProfessionalExperience :: BSL.ByteString
 fullProfessionalExperience =
       "  {                                                 \
       \    \"title\":        \"Softwareentwickler\",       \

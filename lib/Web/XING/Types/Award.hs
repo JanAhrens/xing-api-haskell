@@ -11,11 +11,7 @@ import Control.Applicative ((<*>), (<$>))
 import Data.Text (Text)
 
 data Award
-  = Award {
-      name        :: Text
-    , dateAwarded :: Int
-    , url         :: Maybe Text
-  }
+  = Award Text Int (Maybe Text)
   deriving (Show, Eq)
 
 instance FromJSON Award where

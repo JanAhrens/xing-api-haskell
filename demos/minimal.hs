@@ -1,5 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+module Main where
+
 import Web.XING
 import qualified Data.ByteString.Char8 as BS
 

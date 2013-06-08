@@ -1,13 +1,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE FlexibleContexts #-}
 
-module CliDemo where
+module Main where
 
 import System.IO (hFlush, stdout)
 import Data.Maybe (fromJust, isJust)
-import Network.HTTP.Conduit (withManager)
 
-import Control.Monad.IO.Class (MonadIO (liftIO))
 import Control.Monad.Trans.Control (MonadBaseControl)
 import Control.Monad.Trans.Resource (MonadResource)
 
@@ -15,8 +13,8 @@ import Data.Monoid (mappend)
 import qualified Data.ByteString.Char8 as BS
 import qualified Data.Text.IO as T
 
-import qualified Config
 import Web.XING
+import qualified Config
 
 readVerifier
   :: URL
