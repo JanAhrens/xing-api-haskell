@@ -30,7 +30,6 @@ source-repository head
 
 library
   exposed-modules:     Web.XING
-                     , Yesod.Auth.XING
 
   build-depends:       base                    == 4.5.*
                      , containers              == 0.4.*
@@ -46,9 +45,6 @@ library
                      , aeson                   == 0.6.*
                      , lifted-base             == 0.2.*
                      , monad-control           == 0.3.*
-                     , yesod-core              == 1.1.*
-                     , yesod-auth              == 1.1.*
-                     , hamlet                  == 1.1.*
 
   other-modules:       Web.XING.API
                      , Web.XING.API.Error
@@ -131,29 +127,5 @@ executable hello-xing
   else
     buildable:       False
   main-is:           hello-XING.hs
-  GHC-options:       -Wall -Werror
-  Default-language:  Haskell2010
-
-executable yesod-auth
-  hs-source-dirs:    demos
-  if flag(demos)
-    buildable:       True
-    build-depends:     base                    == 4.*
-                     , bytestring              == 0.9.*
-                     , containers              == 0.4.*
-                     , hamlet                  == 1.1.*
-                     , http-conduit            == 1.8.*
-                     , shakespeare-i18n        == 1.0.*
-                     , shakespeare-js          == 1.1.*
-                     , text                    == 0.11.*
-                     , time                    == 1.4.*
-                     , warp                    == 1.3.*
-                     , xing-api
-                     , yesod-auth              == 1.1.*
-                     , yesod-core              == 1.1.*
-                     , yesod-form              == 1.2.*
-  else
-    buildable:       False
-  main-is:           yesod-auth.hs
   GHC-options:       -Wall -Werror
   Default-language:  Haskell2010
