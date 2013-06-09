@@ -14,7 +14,7 @@
 
 module Main where
 
--- TODO languages is defined by Yesod and Web.XING.Calls.User. Find a better name for the XING part
+-- TODO: Web.XING.Types.User.FullUser also exports languages. Find a better name.
 import           Yesod.Core hiding (languages)
 import           Network.Wai.Handler.Warp (run)
 import           Text.Hamlet (hamlet)
@@ -33,7 +33,7 @@ import qualified Config
 import qualified Data.Text as T
 
 data HelloXING = HelloXING {
-    httpManager :: Manager
+    httpManager   :: Manager
   , oAuthConsumer :: OAuth
 }
 
@@ -41,10 +41,10 @@ instance Yesod HelloXING where
   defaultLayout = bootstrapLayout
 
 mkYesod "HelloXING" [parseRoutes|
-  / HomeR GET
+  /          HomeR      GET
   /handshake HandshakeR POST
-  /callback CallbackR GET
-  /logout LogoutR POST
+  /callback  CallbackR  GET
+  /logout    LogoutR    POST
 |]
 
 postHandshakeR :: Handler RepHtml
@@ -147,22 +147,23 @@ whoAmI user birthDayInDays = do
       <a href=#{permalink user}>#{displayName user}
     <p>
       Hey #{firstName user}! Welcome to this demo.<br>
-      Your birthday is in #{show birthDayInDays} days.
 
-    $if (M.member "de" $ languages user)
+
+    <p>
+      Your next birthday is in #{show birthDayInDays} days.
+
+    <p>
+      Did you know? In Germany you would be greeted with "Guten Tag 
       $if (gender user) == Male
-        Herr #{lastName user}
+        Herr
       $else
-        Frau #{lastName user}
-      \ spricht folgende Fremdsprachen: #{T.intercalate ", " $ M.keys (M.delete "de" $ languages user)}.
-    $else
+        Frau
+      \ #{lastName user}".
+
+    $if (length (M.keys (languages user)) > 1)
       <p>
-        Did you know? In Germany you would be greeted with 
-        $if (gender user) == Male
-          "Guten Tag Herr #{lastName user}"
-        $else
-          "Guten Tag Frau #{lastName user}"
-        .
+        Impressive! You are speaking #{length (M.keys (languages user))} languages:
+        \  #{T.intercalate ", " (M.keys (languages user))}.
 
     $maybe mail <- activeEmail user
       <p>Your active email address is <a href=mailto:#{mail}>#{mail}</a>.
