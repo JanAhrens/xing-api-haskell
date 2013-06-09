@@ -1,3 +1,8 @@
+-- This is a minimal example that can fit in the README and shows how to
+-- do the OAuth handshake and call a protected resource.
+-- It's not the best example since it's not reusing access tokens.
+-- Have a look at the cli-demo.hs file for a more complex example.
+
 {-# LANGUAGE OverloadedStrings #-}
 
 module Main where

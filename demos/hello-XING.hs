@@ -1,3 +1,11 @@
+-- This demo shows how to use Yesod with the XING API.
+--
+-- The OAuth handshake is implemented without using yesod-auth.
+-- Have a look at the yesod-auth-xing package for a simpler
+-- solution to authenticate users using the XING API.
+--
+-- Make sure to setup your Config.hs file before trying this demo.
+
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE QuasiQuotes #-}

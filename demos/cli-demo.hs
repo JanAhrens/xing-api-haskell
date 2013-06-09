@@ -1,3 +1,10 @@
+-- This demo shows how to authenticate users using OAuth and how to
+-- reuse the access tokens.
+-- It used the OAuth out of band (OOB) mode and can be used as a starting
+-- point to write an application that does not to have a web view.
+--
+-- Make sure to setup your Config.hs file before trying this demo.
+
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE FlexibleContexts #-}
 
