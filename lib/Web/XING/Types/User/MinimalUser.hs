@@ -13,8 +13,8 @@ import Data.Text (Text)
 data MinimalUser
   = MinimalUser
       UserId
-      Text -- ^ display_name
-      Text -- ^ permalink
+      Text
+      Text
       PhotoUrls
   deriving (Show, Eq)
 

@@ -10,7 +10,7 @@ module Web.XING.Auth
     , getAccessToken
     , Patch.token
     , Patch.tokenSecret
-      -- * re-export of some Web.Authenticate.OAuth functions
+      -- reexports of some Web.Authenticate.OAuth functions
     , signOAuth
     , newCredential
     , oauthCallback

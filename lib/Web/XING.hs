@@ -5,7 +5,7 @@ module Web.XING
     , module Web.XING.Types
     , module Web.XING.Calls.IdCard
     , module Web.XING.Calls.User
-    -- * re-exports
+    -- re-exports
     , liftIO
     , withManager
     ) where

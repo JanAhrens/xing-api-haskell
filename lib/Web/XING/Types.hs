@@ -8,11 +8,12 @@ module Web.XING.Types
     , Verifier
     , AccessToken
     , URL
-      -- * reexports
+      -- reexports
     , Manager
     , OAuth(..)
     , Credential(..)
     , Status
+    -- * XING data types
     , module Web.XING.Types.Address
     , module Web.XING.Types.Award
     , module Web.XING.Types.BirthDate
