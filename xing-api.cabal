@@ -81,6 +81,12 @@ Test-Suite TestMain
                      , containers              == 0.4.*
                      , time                    == 1.4.*
                      , xing-api
+  other-modules:       Types.AddressTest
+                     , Types.AwardTest
+                     , Types.BirthDateTest
+                     , Types.ProfessionalExperienceTest
+                     , Types.User.FullUserTest
+                     , Types.User.MinimalUserTest
   hs-source-dirs:    tests
   main-is:           Main.hs
   ghc-options:       -Wall
