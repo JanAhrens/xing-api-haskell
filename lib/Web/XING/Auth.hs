@@ -3,7 +3,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 
 module Web.XING.Auth
-    ( -- * OAuth related functions
+    ( -- * OAuth
       consumer
     , getRequestToken
     , Patch.authorizeUrl
@@ -11,9 +11,8 @@ module Web.XING.Auth
     , Patch.token
     , Patch.tokenSecret
       -- reexports of some Web.Authenticate.OAuth functions
-    , signOAuth
-    , newCredential
-    , oauthCallback
+    , newCredential -- | (re)create an OAuth token (for example access token)
+    , oauthCallback -- | extract the OAuth callback from a consumer
     ) where
 
 import Prelude
@@ -30,9 +29,10 @@ import Data.Maybe (fromMaybe)
 import Web.XING.Types
 import Web.XING.API.Error
 
+-- | Create an OAuth consumer
 consumer
-  :: BS.ByteString
-  -> BS.ByteString
+  :: BS.ByteString -- ^ consumer key
+  -> BS.ByteString -- ^ consumer secret
   -> OAuth
 consumer consumerKey consumerSecret = newOAuth
   { oauthRequestUri      = "https://api.xing.com/v1/request_token"
@@ -45,11 +45,12 @@ consumer consumerKey consumerSecret = newOAuth
   , oauthCallback        = Just "oob"
   }
 
+-- | Create a request token (/temporary credentials/)
 getRequestToken
  :: (MonadResource m, MonadBaseControl IO m)
- => OAuth
+ => OAuth -- ^ OAuth consumer
  -> Manager
- -> m (RequestToken, URL)
+ -> m (RequestToken, URL) -- ^ request token and authorize URL
 getRequestToken oa manager = E.catch
     tryToGetRequestToken
     (handleStatusCodeException "POST /v1/request_token")
@@ -58,11 +59,12 @@ getRequestToken oa manager = E.catch
       cred <- Patch.getTemporaryCredential' id oa manager
       return (cred, Patch.authorizeUrl oa cred)
 
+-- | Exchange request token for an access token (/token credentials/)
 getAccessToken
   :: (MonadResource m, MonadBaseControl IO m)
-  => RequestToken
-  -> Verifier
-  -> OAuth
+  => RequestToken -- ^ request token obtained from 'getRequestToken'
+  -> Verifier     -- ^ verifier obtained by calling 'Patch.authorizeUrl'
+  -> OAuth        -- ^ OAuth consumer (see 'consumer')
   -> Manager
   -> m (Credential, BS.ByteString)
 getAccessToken requestToken verifier oa manager = E.catch

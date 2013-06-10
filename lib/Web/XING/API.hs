@@ -5,7 +5,6 @@
 module Web.XING.API
     ( -- * API request interface
       apiRequest
-    , apiBaseUrl
     ) where
 
 import           Network.HTTP.Types (Method)
@@ -19,19 +18,20 @@ import           Control.Monad.Trans.Control (MonadBaseControl)
 import           Control.Monad.Trans.Resource (MonadResource)
 import           Web.XING.Types
 import           Web.XING.API.Error
-import           Web.XING.Auth
 import qualified Control.Exception.Lifted as E
+import           Web.Authenticate.OAuth (signOAuth)
 
 apiBaseUrl :: BS.ByteString
 apiBaseUrl = "https://api.xing.com"
 
+-- | Low level API request interface
 apiRequest
   :: (MonadResource m, MonadBaseControl IO m)
-  => OAuth
+  => OAuth         -- ^ OAuth consumer
   -> Manager
   -> AccessToken
-  -> Method
-  -> BS.ByteString
+  -> Method        -- ^ HTTP verb
+  -> BS.ByteString -- ^ HTTP path
   -> m (Response BSL.ByteString)
 apiRequest oa manager cr m uri  = do
   let req = fromJust $ parseUrl $ BS.unpack (apiBaseUrl `mappend` uri)

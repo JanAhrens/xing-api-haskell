@@ -21,8 +21,12 @@ import Network.HTTP.Conduit (Manager, Request(method), httpLbs, responseStatus, 
 import Network.HTTP.Types (status201, parseSimpleQuery)
 import Data.Maybe (fromJust, fromMaybe)
 
-token, tokenSecret :: Credential -> BS.ByteString
+-- | extract the token from the 'Credential'
+token :: Credential -> BS.ByteString
 token = fromMaybe "" . lookup "oauth_token" . unCredential
+
+-- | extract the secret from the 'Credential'
+tokenSecret :: Credential -> BS.ByteString
 tokenSecret = fromMaybe "" . lookup "oauth_token_secret" . unCredential
 
 toStrict :: BSL.ByteString -> BS.ByteString
@@ -45,9 +49,10 @@ getTemporaryCredential' hook oa manager = do
       return $ Credential dic
     else liftIO . throwIO . OAuthException $ "Gaining OAuth Temporary Credential Failed: " ++ BSL.unpack (responseBody rsp)
 
-authorizeUrl :: OAuth
-             -> Credential
-             -> BS.ByteString
+-- | URL to obtain OAuth verifier
+authorizeUrl :: OAuth         -- ^ OAuth consumer
+             -> Credential    -- ^ request token 'Web.XING.getRequestToken'
+             -> BS.ByteString -- ^ URL to send the user to
 authorizeUrl consumer = BS.pack . (authorizeUrl' (\_ -> const []) consumer{oauthCallback=Nothing})
 
 -- we can't use OA.getAccessToken, because the XING API returns 201 instead of 200

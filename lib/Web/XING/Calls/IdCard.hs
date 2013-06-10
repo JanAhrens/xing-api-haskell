@@ -18,6 +18,7 @@ import Control.Monad.Trans.Resource (MonadResource)
 import Control.Exception (throw)
 import Data.Aeson (encode, decode, Value(..), object, (.=))
 
+-- | Get your id card <https://dev.xing.com/docs/get/users/me/id_card>
 getIdCard
   :: (MonadResource m, MonadBaseControl IO m)
   => OAuth

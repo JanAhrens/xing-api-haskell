@@ -21,6 +21,7 @@ import Control.Exception (throw)
 import Data.Text.Encoding (encodeUtf8)
 import Data.Text (intercalate)
 
+-- | Get user details <https://dev.xing.com/docs/get/users/:id>
 getUsers
   :: (MonadResource m, MonadBaseControl IO m)
   => OAuth

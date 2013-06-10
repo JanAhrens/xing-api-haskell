@@ -3,9 +3,10 @@ module Web.XING
       module Web.XING.Auth
     , module Web.XING.API
     , module Web.XING.Types
+    -- * Calls
     , module Web.XING.Calls.IdCard
     , module Web.XING.Calls.User
-    -- re-exports
+    -- * Common used functions (re-exports)
     , liftIO
     , withManager
     ) where
