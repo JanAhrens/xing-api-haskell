@@ -11,6 +11,7 @@ import Web.XING.Types
 import Network.HTTP.Types (ResponseHeaders)
 import Data.Maybe (fromMaybe)
 import qualified Data.ByteString.Lazy.Char8 as BSL
+import qualified Data.ByteString.Char8 as BS
 import Control.Applicative ((<$>), (<*>))
 import Data.Aeson (decode, FromJSON(parseJSON), Value(Object) , (.:))
 import Control.Exception (throw)
@@ -43,7 +44,7 @@ instance FromJSON XINGError where
   parseJSON _ = fail "no parse"
 
 handleStatusCodeException
-  :: ByteString
+  :: BS.ByteString
   -> HttpException
   -> a
 handleStatusCodeException call (StatusCodeException status headers) = throw $ handleError status headers call
@@ -52,7 +53,7 @@ handleStatusCodeException _    e                                    = throw e
 handleError
   :: Status
   -> ResponseHeaders
-  -> ByteString
+  -> BS.ByteString
   -> APIError
 handleError _ headers _ =
   case decode $ BSL.fromChunks [fromMaybe "{}" (lookup "X-Response-Body-Start" headers)] of

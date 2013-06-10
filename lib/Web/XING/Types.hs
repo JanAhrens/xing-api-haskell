@@ -12,7 +12,6 @@ module Web.XING.Types
     , Manager
     , OAuth(..)
     , Credential(..)
-    , BS.ByteString
     , Status
     , module Web.XING.Types.Address
     , module Web.XING.Types.Award
