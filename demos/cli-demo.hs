@@ -3,10 +3,12 @@
 -- It used the OAuth out of band (OOB) mode and can be used as a starting
 -- point to write an application that does not to have a web view.
 --
--- Make sure to setup your Config.hs file before trying this demo.
+-- Make sure to set the environment variables XING_CONSUMER_KEY and
+-- XING_CONSUMER_SECRET before trying this demo.
 
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Main where
 
@@ -21,7 +23,10 @@ import qualified Data.ByteString.Char8 as BS
 import qualified Data.Text.IO as T
 
 import Web.XING
-import qualified Config
+
+import System.Environment (getEnv)
+import qualified System.IO.Error
+import qualified Control.Exception as E
 
 readVerifier
   :: URL
@@ -33,43 +38,55 @@ readVerifier url = do
   BS.getLine
 
 showAccessToken
-  :: (AccessToken, ByteString)
+  :: (AccessToken, BS.ByteString)
   -> IO ()
 showAccessToken (accessToken, uid) = do
   putStrLn $ ""
   putStrLn $ "Hello " `mappend` (BS.unpack uid) `mappend` "!"
-  putStrLn $ "You should put your access token in Config.hs:"
+  putStrLn $ "You should set the access token as environment variables:"
   putStrLn $ ""
-  putStrLn $ "accessToken = Just $ newCredential"
-  putStrLn $ "  \"" `mappend` ((BS.unpack.token)       accessToken) `mappend` "\""
-  putStrLn $ "  \"" `mappend` ((BS.unpack.tokenSecret) accessToken) `mappend` "\""
+  putStrLn $ "  export XING_ACCESS_TOKEN_KEY=\""    `mappend` ((BS.unpack.token)       accessToken) `mappend` "\""
+  putStrLn $ "  export XING_ACCESS_TOKEN_SECRET=\"" `mappend` ((BS.unpack.tokenSecret) accessToken) `mappend` "\""
   putStrLn $ ""
 
 handshake
   :: (MonadResource m, MonadBaseControl IO m)
   => OAuth
   -> Manager
-  -> m (AccessToken, ByteString)
+  -> m (AccessToken, BS.ByteString)
 handshake oa manager = do
   (requestToken, url) <- getRequestToken oa manager
   verifier <- liftIO $ readVerifier url
   getAccessToken requestToken verifier oa manager
 
+readAccessToken :: IO (Maybe Credential)
+readAccessToken = do
+  access_token_key    <- getEnv "XING_ACCESS_TOKEN_KEY"
+  access_token_secret <- getEnv "XING_ACCESS_TOKEN_SECRET"
+  return $ Just $ newCredential (BS.pack access_token_key) (BS.pack access_token_secret)
+
 main :: IO ()
 main = do
+  consumer_key    <- getEnv "XING_CONSUMER_KEY"
+  consumer_secret <- getEnv "XING_CONSUMER_SECRET"
+  let xingConsumer = consumer (BS.pack consumer_key) (BS.pack consumer_secret)
+
+  maybeAccessToken <- E.catch (readAccessToken) (\(_ :: System.IO.Error.IOError) -> return Nothing)
+
   putStrLn "XING API demo"
   user <- withManager $ \manager -> do
-    accessToken <- if isJust Config.accessToken
-      then return $ fromJust Config.accessToken
-      else auth manager
-    getIdCard Config.testConsumer manager accessToken
+    accessToken <- if isJust maybeAccessToken
+      then return $ fromJust maybeAccessToken
+      else auth xingConsumer manager
+    getIdCard xingConsumer manager accessToken
   T.putStrLn (displayName user)
 
 auth
   :: (MonadResource m, MonadBaseControl IO m)
-  => Manager
+  => OAuth
+  -> Manager
   -> m RequestToken
-auth manager = do
-  res@(accessToken, _) <- handshake Config.testConsumer manager
+auth oa manager = do
+  res@(accessToken, _) <- handshake oa manager
   liftIO $ showAccessToken res
   return accessToken

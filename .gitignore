@@ -1,5 +1,5 @@
 dist
-demos/Config.hs
+demos.sh
 client_session_key.aes
 
 # vim temp files

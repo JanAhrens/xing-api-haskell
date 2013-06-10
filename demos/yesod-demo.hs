@@ -4,7 +4,8 @@
 -- Have a look at the yesod-auth-xing package for a simpler
 -- solution to authenticate users using the XING API.
 --
--- Make sure to setup your Config.hs file before trying this demo.
+-- Make sure to set the environment variables XING_CONSUMER_KEY and
+-- XING_CONSUMER_SECRET before trying this demo.
 
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
@@ -29,8 +30,8 @@ import qualified Data.ByteString.Char8 as BS
 import           Data.Monoid (mappend)
 import qualified Data.Text.Encoding as E
 import           Data.Time
-import qualified Config
 import qualified Data.Text as T
+import           System.Environment (getEnv)
 
 data HelloXING = HelloXING {
     httpManager   :: Manager
@@ -189,8 +190,11 @@ main :: IO ()
 main = do
   manager <- newManager def
   let port = 3000
-  let testConsumer = Config.testConsumer{
+  consumer_key    <- getEnv "XING_CONSUMER_KEY"
+  consumer_secret <- getEnv "XING_CONSUMER_SECRET"
+  let xingConsumer = consumer (BS.pack consumer_key) (BS.pack consumer_secret)
+  let xingConsumer' = xingConsumer{
     oauthCallback = Just $ "http://localhost:" `mappend` (BS.pack.show) port `mappend` "/callback"
   }
   putStrLn $ "Starting on port " ++ show port
-  run port =<< toWaiApp (HelloXING manager testConsumer)
+  run port =<< toWaiApp (HelloXING manager xingConsumer')
