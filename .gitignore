@@ -8,3 +8,6 @@ client_session_key.aes
 
 # vagrant
 .vagrant
+
+Gemfile.lock
+Berksfile.lock
