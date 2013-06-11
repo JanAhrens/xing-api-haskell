@@ -37,7 +37,7 @@ source-repository head
 library
   exposed-modules:     Web.XING
 
-  build-depends:       base                    == 4.5.*
+  build-depends:       base                    == 4.*
                      , containers              == 0.4.*
                      , time                    == 1.4.*
                      , text                    == 0.11.*
@@ -123,6 +123,7 @@ executable xing-api-yesod-demo
                      , warp                    == 1.3.*
                      , xing-api
                      , yesod-core              == 1.1.*
+    other-modules:     Helper.YesodHelper
   else
     buildable:       False
   main-is:           yesod-demo.hs
