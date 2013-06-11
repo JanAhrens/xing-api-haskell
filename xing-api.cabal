@@ -1,5 +1,5 @@
 name:                xing-api
-version:             0.1.1
+version:             0.1.2
 synopsis:            Wrapper for the XING API, v1.
 description:         This package is currently under development and not considered stable.
                      The versioning follows <http://semver.org> and the first stable version will be release as 1.0.0.
