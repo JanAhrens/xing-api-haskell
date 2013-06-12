@@ -18,15 +18,25 @@ Vagrant.configure("2") do |config|
     chef.add_recipe 'build-essential'
     chef.add_recipe 'vim'
     chef.add_recipe 'git'
-    chef.add_recipe 'haskell'
+    chef.add_recipe 'haskell::ghc_source'
+    chef.add_recipe 'haskell::platform_source'
 
-     chef.json = {
-       # configuration of the haskell cookbook
-       :travis_build_environment => {
-         :user  => 'vagrant',
-         :group => 'vagrant',
-         :home  => '/home/vagrant'
-       }
-     }
-   end
+
+    chef.json = {
+      # configuration of the haskell cookbook
+      :travis_build_environment => {
+        :user  => 'vagrant',
+        :group => 'vagrant',
+        :home  => '/home/vagrant'
+      },
+      :ghc => {
+        :version => '7.6.3'
+      },
+      :haskell => {
+        :platform => {
+          :version => '2013.2.0.0'
+        }
+      }
+    }
+  end
 end
