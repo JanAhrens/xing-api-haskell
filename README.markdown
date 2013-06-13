@@ -36,6 +36,24 @@ main = withManager $ \manager -> do
       getAccessToken requestToken verifier oauthConfig manager
 ```
 
+## GHCI session
+
+If you want to test this library using GHCI, you can use this snippet as a starting point.
+
+    $ ghci -XOverloadedStrings
+    :module +Network.HTTP.Conduit
+    manager <- newManager def
+
+    :module +Web.XING
+    let oauth = consumer "CONSUMER_KEY" "CONSUMER_SECRET"
+
+    :module +Control.Monad.Trans.Resource
+    (requestToken, url) <- runResourceT (getRequestToken oauth manager)
+    url
+
+    (accessToken, userId) <- runResourceT (getAccessToken requestToken "THE_PIN_YOU_GOT_FROM_XING" oauth manager)
+    userId
+
 ## Development environment
 
 This section walks you through the process of setting up your development environment.
