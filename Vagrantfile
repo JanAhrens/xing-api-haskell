@@ -18,9 +18,7 @@ Vagrant.configure("2") do |config|
     chef.add_recipe 'build-essential'
     chef.add_recipe 'vim'
     chef.add_recipe 'git'
-    chef.add_recipe 'haskell::ghc_source'
-    chef.add_recipe 'haskell::platform_source'
-
+    chef.add_recipe 'haskell::source'
 
     chef.json = {
       # configuration of the haskell cookbook

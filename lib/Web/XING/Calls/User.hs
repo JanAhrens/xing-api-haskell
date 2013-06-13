@@ -30,8 +30,8 @@ getUsers
   -> [UserId]
   -> m UserList
 getUsers oa manager cr uids = do
-  Response _ _ _ body <- apiRequest oa manager cr "GET" ("/v1/users/" `mappend` (encodeUtf8 $ intercalate "," uids))
-  case decode body of
+  res <- apiRequest oa manager cr "GET" ("/v1/users/" `mappend` (encodeUtf8 $ intercalate "," uids))
+  case decode (responseBody res) of
     Just a  -> return a
     Nothing -> throw Mapping
 

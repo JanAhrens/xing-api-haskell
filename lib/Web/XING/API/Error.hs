@@ -47,8 +47,8 @@ handleStatusCodeException
   :: BS.ByteString
   -> HttpException
   -> a
-handleStatusCodeException call (StatusCodeException status headers) = throw $ handleError status headers call
-handleStatusCodeException _    e                                    = throw e
+handleStatusCodeException call (StatusCodeException status headers _) = throw $ handleError status headers call
+handleStatusCodeException _    e                                      = throw e
 
 handleError
   :: Status

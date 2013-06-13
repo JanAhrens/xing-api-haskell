@@ -26,8 +26,8 @@ getIdCard
   -> AccessToken
   -> m MinimalUser
 getIdCard oa manager cr = do
-  Response _ _ _ body <- apiRequest oa manager cr "GET" "/v1/users/me/id_card"
-  case decode body of
+  res <- apiRequest oa manager cr "GET" "/v1/users/me/id_card"
+  case decode (responseBody res) of
     Just a -> return a
     Nothing -> throw Mapping
 
