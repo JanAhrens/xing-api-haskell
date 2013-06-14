@@ -10,7 +10,7 @@ Vagrant.configure("2") do |config|
     v.customize ['modifyvm', :id, '--memory', 1024]
   end
 
-  config.vm.network :forwarded_port, guest: 3000, host: 3000 # Yesod
+  config.vm.network :forwarded_port, guest: 3000, host: 3000 # Yesod and haddock
 
   config.vm.provision :chef_solo do |chef|
     # reminder: add cookbook dependencies to the Berksfile
