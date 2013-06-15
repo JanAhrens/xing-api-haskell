@@ -1,5 +1,6 @@
-.PHONY: all dependencies clean configure haddock
-CABAL_FLAGS = --enable-tests -f demos -f minimal-demo
+.PHONY: all dependencies clean configure build test haddock
+TEST_FLAGS = --enable-tests
+CABAL_FLAGS = $(TEST_FLAGS) -f demos -f minimal-demo
 
 all:
 	@echo "make [targets]"
@@ -8,6 +9,7 @@ all:
 	@echo "  dependencies  Install all required haskell packages"
 	@echo "  configure     Setup cabal"
 	@echo "  clean         Remove all build information"
+	@echo "  test          Run the testsuite"
 	@echo "  haddock       Build the haddock documentation and start a HTTP server serving it"
 
 dependencies:
@@ -19,6 +21,11 @@ clean:
 
 configure: clean
 	cabal configure $(CABAL_FLAGS)
+
+test: clean
+	cabal configure $(TEST_FLAGS)
+	cabal build
+	cabal test
 
 haddock: configure
 	cabal haddock
