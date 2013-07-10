@@ -1,0 +1,59 @@
+extensions: {}
+cabal-file: project.cabal
+version: 1
+module-template: ! 'module MODULE_NAME where
+
+'
+modules:
+  Main(demos/cli-demo.hs):
+    filename: demos/cli-demo.hs
+  Main(demos/yesod-demo.hs):
+    filename: demos/yesod-demo.hs
+  Web.XING.Types.User.FullUser:
+    filename: lib/Web/XING/Types/User/FullUser.hs
+  Web.XING.Auth:
+    filename: lib/Web/XING/Auth.hs
+  Types.BirthDateTest:
+    filename: tests/Types/BirthDateTest.hs
+  Web.XING.Internal.AuthenticateOAuthPatch:
+    filename: lib/Web/XING/Internal/AuthenticateOAuthPatch.hs
+  Types.User.FullUserTest:
+    filename: tests/Types/User/FullUserTest.hs
+  Main(tests/Main.hs):
+    filename: tests/Main.hs
+  Web.XING.Calls.User:
+    filename: lib/Web/XING/Calls/User.hs
+  Types.AddressTest:
+    filename: tests/Types/AddressTest.hs
+  Web.XING.Types:
+    filename: lib/Web/XING/Types.hs
+  Web.XING.Types.BirthDate:
+    filename: lib/Web/XING/Types/BirthDate.hs
+  Helper.YesodHelper:
+    filename: demos/Helper/YesodHelper.hs
+  Web.XING.Types.ProfessionalExperience:
+    filename: lib/Web/XING/Types/ProfessionalExperience.hs
+  Web.XING.Types.Address:
+    filename: lib/Web/XING/Types/Address.hs
+  Web.XING:
+    filename: lib/Web/XING.hs
+  Main(demos/minimal-demo.hs):
+    filename: demos/minimal-demo.hs
+  Web.XING.Types.Award:
+    filename: lib/Web/XING/Types/Award.hs
+  Types.User.MinimalUserTest:
+    filename: tests/Types/User/MinimalUserTest.hs
+  Web.XING.Calls.IdCard:
+    filename: lib/Web/XING/Calls/IdCard.hs
+  Types.ProfessionalExperienceTest:
+    filename: tests/Types/ProfessionalExperienceTest.hs
+  Web.XING.Types.User.MinimalUser:
+    filename: lib/Web/XING/Types/User/MinimalUser.hs
+  Types.AwardTest:
+    filename: tests/Types/AwardTest.hs
+  Web.XING.API:
+    filename: lib/Web/XING/API.hs
+  Web.XING.API.Error:
+    filename: lib/Web/XING/API/Error.hs
+  Web.XING.Types.User:
+    filename: lib/Web/XING/Types/User.hs
