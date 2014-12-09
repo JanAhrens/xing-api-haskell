@@ -34,7 +34,7 @@ toStrict = BS.concat . BSL.toChunks
 
 -- we can't use OA.getTemporaryCredential', because the XING API returns 201 instead of 200
 getTemporaryCredential' :: (MonadResource m, MonadBaseControl IO m)
-                => (Request m -> Request m)
+                => (Request -> Request)
                 -> OAuth
                 -> Manager
                 -> m Credential
@@ -57,7 +57,7 @@ authorizeUrl consumer = BS.pack . (authorizeUrl' (\_ -> const []) consumer{oauth
 
 -- we can't use OA.getAccessToken, because the XING API returns 201 instead of 200
 getAccessToken' :: (MonadResource m, MonadBaseControl IO m)
-                => (Request m -> Request m)
+                => (Request -> Request)
                 -> OAuth
                 -> Credential
                 -> Manager
