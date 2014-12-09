@@ -83,7 +83,7 @@ library
 Test-Suite TestMain
   type:              exitcode-stdio-1.0
   build-depends:       base, text, bytestring, aeson, containers
-                     , time, xing-api, HTF == 0.10.*
+                     , time, xing-api, HTF == 0.12.*
   other-modules:       Types.AddressTest
                      , Types.AwardTest
                      , Types.BirthDateTest
