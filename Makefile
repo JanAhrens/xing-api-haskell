@@ -13,7 +13,7 @@ all:
 	@echo "  haddock       Build the haddock documentation and start a HTTP server serving it"
 
 dependencies:
-	cabal install $(CABAL_FLAGS) --only-dependencies
+	cabal install $(CABAL_FLAGS) --only-dependencies --jobs=4
 
 clean:
 	cabal clean

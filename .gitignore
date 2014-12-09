@@ -5,9 +5,3 @@ client_session_key.aes
 # vim temp files
 *.swp
 *.swo
-
-# vagrant
-.vagrant
-
-Gemfile.lock
-Berksfile.lock
