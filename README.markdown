@@ -58,11 +58,17 @@ If you want to test this library using GHCI, you can use this snippet as a start
 
 The simplest way to setup a development environment is to use Docker.
 
-> sudo docker build -t xing-api-haskell .
+> docker build -t xing-api-haskell .
 
 You can then bind your local git repository as a volume in Docker:
 
-> sudo docker run -i -t --rm -v $PWD:/opt/app xing-api-haskell ghci
+> docker run -i -t --rm -v /etc/ssl/certs:/etc/ssl/certs -v $PWD:/opt/app xing-api-haskell ghci
+
+I might be useful to reuse the CA store from your local maschine, because the container does not contain any CAs.
+
+To test a simple interaction with the API, you can copy and paste the following snippet into the ghci session:
+
+> withManager $ \manager -> getRequestToken (consumer "YOUR\_CONSUMER\_KEY" "YOUR\_CONSUMER\_SECRET") manager
 
 This repository includes several demo programs.
 To use them, you have to obtain an API consumer key by registering your
