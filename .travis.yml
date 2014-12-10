@@ -1,4 +1,5 @@
 language: haskell
 ghc: 7.8
 install:
-  - cabal install --only-dependencies --enable-tests; cat /home/travis/.cabal/logs/haskell-src*.log
+  # https://github.com/haskell-suite/haskell-src-exts/issues/64
+  - happy --version; cabal install happy; happy --version; cabal install --only-dependencies --enable-tests
