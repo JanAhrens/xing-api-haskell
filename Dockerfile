@@ -19,4 +19,4 @@ ENV PATH /root/.cabal/bin:$PATH
 RUN cd /opt/app && make test && cabal copy && cabal register
 
 WORKDIR /opt/app
-VOLUME ["/opt/app"]
+VOLUME ["/opt/app", "/etc/ssl/certs"]
