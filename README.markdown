@@ -1,6 +1,7 @@
 # xing-api
 
 [![Build Status](https://api.travis-ci.org/JanAhrens/xing-api-haskell.png)](https://travis-ci.org/JanAhrens/xing-api-haskell)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FJanAhrens%2Fxing-api-haskell.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FJanAhrens%2Fxing-api-haskell?ref=badge_shield)
 
 This Haskell library is a wrapper for the [XING API](https://dev.xing.com/).
 
@@ -77,3 +78,7 @@ Put the consumer key and secret in the `demos/Config.hs` file (the test consumer
 The `Config.hs.template` file is recommended to be used as a template.
 
     cp Config.hs.template Config.hs
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FJanAhrens%2Fxing-api-haskell.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FJanAhrens%2Fxing-api-haskell?ref=badge_large)
